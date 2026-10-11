@@ -5,7 +5,7 @@
     "url": "https://feeds.acast.com/public/shows/les-ptites-histoires",
     "publisher": "https://shows.acast.com/les-ptites-histoires",
     "priority": 1,
-    "checkedAt": "2026-10-11T19:43:47.113504+00:00",
+    "checkedAt": "2026-10-11T19:47:14.419335+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.acast.com/public/shows/les-ptites-histoires",
@@ -15,9 +15,9 @@
     "valid": true,
     "identityConfirmed": true,
     "feedPublisher": "https://taleming.com",
-    "audioHttpVerified": 0,
-    "audioUnavailableOrUnverified": 846,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioHttpVerified": 846,
+    "audioUnavailableOrUnverified": 0,
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "encore",
@@ -25,7 +25,7 @@
     "url": "https://feeds.acast.com/public/shows/encore-une-histoire",
     "publisher": "https://shows.acast.com/encore-une-histoire",
     "priority": 1,
-    "checkedAt": "2026-10-11T19:43:47.115384+00:00",
+    "checkedAt": "2026-10-11T19:47:14.420335+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.acast.com/public/shows/encore-une-histoire",
@@ -35,9 +35,9 @@
     "valid": true,
     "identityConfirmed": true,
     "feedPublisher": "https://podcast.ausha.co/encore-une-histoire",
-    "audioHttpVerified": 0,
-    "audioUnavailableOrUnverified": 599,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioHttpVerified": 599,
+    "audioUnavailableOrUnverified": 0,
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "magiques",
@@ -45,7 +45,7 @@
     "url": "https://feeds.audiomeans.fr/feed/a94564fd-4185-4a1e-9bc4-c784dcb4c4e5.xml",
     "publisher": "https://audio360.fr/podcast/9/histoires-magiques",
     "priority": 1,
-    "checkedAt": "2026-10-11T19:43:47.115384+00:00",
+    "checkedAt": "2026-10-11T19:47:14.420335+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.audiomeans.fr/feed/a94564fd-4185-4a1e-9bc4-c784dcb4c4e5.xml",
@@ -57,7 +57,7 @@
     "feedPublisher": "https://www.audio360.fr",
     "audioHttpVerified": 385,
     "audioUnavailableOrUnverified": 0,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "fondacci",
@@ -65,7 +65,7 @@
     "url": "https://feeds.audiomeans.fr/feed/2f301d7e-7dd7-47de-9221-33caea88a5a4.xml",
     "publisher": "https://www.radioclassique.fr",
     "priority": 2,
-    "checkedAt": "2026-10-11T19:44:11.199021+00:00",
+    "checkedAt": "2026-10-11T19:47:46.814884+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.audiomeans.fr/feed/2f301d7e-7dd7-47de-9221-33caea88a5a4.xml",
@@ -77,7 +77,7 @@
     "feedPublisher": "https://www.radioclassique.fr/podcasts/serie/des-histoires-en-musique/",
     "audioHttpVerified": 296,
     "audioUnavailableOrUnverified": 0,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "liberte",
@@ -85,7 +85,7 @@
     "url": "https://feeds.acast.com/public/shows/contes-en-liberte",
     "publisher": "https://shows.acast.com/contes-en-liberte",
     "priority": 2,
-    "checkedAt": "2026-10-11T19:44:38.698560+00:00",
+    "checkedAt": "2026-10-11T19:48:13.672169+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.acast.com/public/shows/contes-en-liberte",
@@ -95,9 +95,9 @@
     "valid": true,
     "identityConfirmed": true,
     "feedPublisher": "https://contesenliberte.com/",
-    "audioHttpVerified": 0,
-    "audioUnavailableOrUnverified": 177,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioHttpVerified": 177,
+    "audioUnavailableOrUnverified": 0,
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "mille",
@@ -105,7 +105,7 @@
     "url": "https://feeds.acast.com/public/shows/19334001-b713-4e78-b490-9a7028c0f412",
     "publisher": "https://shows.acast.com/mille-et-une-histoires",
     "priority": 2,
-    "checkedAt": "2026-10-11T19:44:40.337389+00:00",
+    "checkedAt": "2026-10-11T19:48:50.895501+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.acast.com/public/shows/19334001-b713-4e78-b490-9a7028c0f412",
@@ -115,9 +115,9 @@
     "valid": true,
     "identityConfirmed": true,
     "feedPublisher": "https://www.fleuruspresse.com/magazines/pour-les-plus-petits/mille-et-une-histoires",
-    "audioHttpVerified": 0,
-    "audioUnavailableOrUnverified": 137,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioHttpVerified": 137,
+    "audioUnavailableOrUnverified": 0,
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "pays",
@@ -125,7 +125,7 @@
     "url": "https://feeds.podcastics.com/podcastics/podcasts/rss/2134_92671bf46d4a7099cbc02c8805fedaa8.rss",
     "publisher": "https://www.podcastics.com",
     "priority": 2,
-    "checkedAt": "2026-10-11T19:44:49.010384+00:00",
+    "checkedAt": "2026-10-11T19:49:23.379882+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.podcastics.com/podcastics/podcasts/rss/2134_92671bf46d4a7099cbc02c8805fedaa8.rss",
@@ -137,7 +137,7 @@
     "feedPublisher": "https://www.podcastics.com/podcast/au-pays-des-histoires/",
     "audioHttpVerified": 95,
     "audioUnavailableOrUnverified": 0,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "aventure",
@@ -145,7 +145,7 @@
     "url": "https://feeds.audiomeans.fr/feed/2634f188-47a0-48e1-b4ae-0ac360ed3ac3.xml",
     "publisher": "https://podcasts.audiomeans.fr/conte-moi-l-aventure--0ac360ed3ac3",
     "priority": 2,
-    "checkedAt": "2026-10-11T19:44:52.347146+00:00",
+    "checkedAt": "2026-10-11T19:49:26.741784+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.audiomeans.fr/feed/2634f188-47a0-48e1-b4ae-0ac360ed3ac3.xml",
@@ -157,7 +157,7 @@
     "feedPublisher": "https://www.cheriefm.fr/podcasts/conte-moi-l-aventure",
     "audioHttpVerified": 141,
     "audioUnavailableOrUnverified": 0,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "baba",
@@ -165,7 +165,7 @@
     "url": "https://feeds.podcastics.com/podcastics/podcasts/rss/4622_3343651ffefc083680983bb01d613319.rss",
     "publisher": "https://www.podcastics.com",
     "priority": 3,
-    "checkedAt": "2026-10-11T19:44:55.725988+00:00",
+    "checkedAt": "2026-10-11T19:49:27.106662+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.podcastics.com/podcastics/podcasts/rss/4622_3343651ffefc083680983bb01d613319.rss",
@@ -177,7 +177,7 @@
     "feedPublisher": "https://www.lesyeuxdanslespoches.com/baba-yaga",
     "audioHttpVerified": 159,
     "audioUnavailableOrUnverified": 0,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "kidstory",
@@ -185,7 +185,7 @@
     "url": "https://feeds.360.audion.fm/AxB4wjUv_HWoti_EgDOZG",
     "publisher": "https://www.studiokodomo.com",
     "priority": 3,
-    "checkedAt": "2026-10-11T19:45:16.561772+00:00",
+    "checkedAt": "2026-10-11T19:49:38.558001+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.360.audion.fm/AxB4wjUv_HWoti_EgDOZG",
@@ -197,7 +197,7 @@
     "feedPublisher": "https://podcasts.360.audion.fm/en/kidstory-les-meilleurs-contes-pour-enfants-1",
     "audioHttpVerified": 262,
     "audioUnavailableOrUnverified": 0,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   },
   {
     "id": "envolees",
@@ -205,7 +205,7 @@
     "url": "https://feeds.acast.com/public/shows/envolees-contees",
     "publisher": "https://shows.acast.com/envolees-contees",
     "priority": 3,
-    "checkedAt": "2026-10-11T19:45:20.608345+00:00",
+    "checkedAt": "2026-10-11T19:49:46.939331+00:00",
     "downloadPolicy": "metadata-only-until-rights-confirmed",
     "httpStatus": 200,
     "finalUrl": "https://feeds.acast.com/public/shows/envolees-contees",
@@ -215,8 +215,8 @@
     "valid": true,
     "identityConfirmed": true,
     "feedPublisher": "https://www.clap.audio/envoleescontees",
-    "audioHttpVerified": 0,
-    "audioUnavailableOrUnverified": 215,
-    "audioVerification": "HTTP HEAD; no audio downloaded; does not establish download rights"
+    "audioHttpVerified": 215,
+    "audioUnavailableOrUnverified": 0,
+    "audioVerification": "HTTP HEAD or GET Range headers only; no audio body read; does not establish download rights"
   }
 ]

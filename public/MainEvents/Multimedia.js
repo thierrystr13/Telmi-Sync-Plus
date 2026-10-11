@@ -14,7 +14,8 @@ export default function mainEventMultimedia(window){
  const binary=name=>{const f=name+(process.platform==='win32'?'.exe':'');const full=path.join(resources,'video-tools',f);return existsSync(full)?full:getBinPath(f)}
  const tools={ffmpeg:binary('ffmpeg'),ffprobe:binary('ffprobe'),ytdlp:binary('yt-dlp'),node:process.execPath,font:path.join(resources,'fonts','exo2.ttf')}
  const send=(name,value)=>{if(!window.isDestroyed())window.webContents.send(name,value)}
- const audio=new AudioImports(tools,path.join(app.getPath('userData'),'audio-imports.json'),()=>storagePaths(undefined,app.getPath('userData')),jobs=>{send('media-audio-jobs',jobs);if(jobs.some(j=>j.status==='ready'))send('local-musics-data',readMusic(getMusicPath()))})
+ let readyCount=0
+ const audio=new AudioImports(tools,path.join(app.getPath('userData'),'audio-imports.json'),()=>storagePaths(undefined,app.getPath('userData')),jobs=>{send('media-audio-jobs',jobs);const count=jobs.filter(j=>j.status==='ready').length;if(count!==readyCount){readyCount=count;try{send('local-musics-data',readMusic(getMusicPath()))}catch(error){send('error-warning',{title:'Stockage musical',message:error.message})}}})
  const sourcesFile=path.join(app.getAppPath(),'public/MainEvents/Multimedia/sources.json')
  let catalog;const catalogReady=fs.readFile(sourcesFile,'utf8').then(raw=>{catalog=new StoryCatalog(path.join(app.getPath('userData'),'story-catalog'),JSON.parse(raw));return catalog.ready})
  let importing=null

@@ -48,12 +48,17 @@ jobs:
       - name: Test clean installation and update preserving settings
         shell: pwsh
         run: ./scripts/test-windows-install.ps1
+      - name: Installer SHA-256
+        shell: pwsh
+        run: |
+          (Get-FileHash electron/dist/TELMI-Sync-Plus-Windows-x64.exe -Algorithm SHA256).Hash | Set-Content electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256 -Encoding ascii
       - uses: actions/upload-artifact@v4
         with:
           name: TELMI-Sync-Plus-Windows-x64
           path: |
             electron/dist/TELMI-Sync-Plus-Windows-x64.exe
             electron/dist/INSTALLATION_TEST.json
+            electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256
           if-no-files-found: error
           retention-days: 30
       - name: Publish verified test installer
@@ -64,7 +69,7 @@ jobs:
         run: |
           $taskTag='v0.20.0-test-'+$env:GITHUB_SHA.Substring(0,7)
           $taskNotes="Version de test non signée. Médias synthétiques et tests d'installation/mise à jour validés par ce workflow. Lecture physique sur Miyoo et NAS Synology non validés. Code source : https://github.com/$env:GITHUB_REPOSITORY/tree/$env:GITHUB_SHA ; licences et liens des sources tierces dans NOTICE.md."
-          gh release create $taskTag electron/dist/TELMI-Sync-Plus-Windows-x64.exe electron/dist/INSTALLATION_TEST.json --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --prerelease --title 'TELMI Sync Plus 0.20.0 — test multimédia' --notes $taskNotes
+          gh release create $taskTag electron/dist/TELMI-Sync-Plus-Windows-x64.exe electron/dist/INSTALLATION_TEST.json electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256 --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --prerelease --title 'TELMI Sync Plus 0.20.0 — test multimédia' --notes $taskNotes
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

@@ -21,7 +21,7 @@ export async function musicCover(tools,job,target,paths,options={}) {
 }
 export class AudioImports{
  constructor(tools,state,paths,changed=()=>{},adapter={}){this.tools=tools;this.state=state;this.paths=paths;this.changed=changed;this.adapter=adapter;this.jobs=[];this.running=false;this.controller=null;this.ready=this.init()}
- async init(){try{this.jobs=JSON.parse(await fs.readFile(this.state,'utf8'));for(const j of this.jobs)if(['queued','running'].includes(j.status))j.status='interrupted'}catch{}}
+ async init(){try{const parsed=JSON.parse(await fs.readFile(this.state,'utf8'));if(!Array.isArray(parsed))return;this.jobs=parsed.filter(j=>/^[a-f0-9-]{36}$/i.test(j.id||'')&&typeof j.url==='string');for(const j of this.jobs)if(['queued','running'].includes(j.status))j.status='interrupted'}catch{this.jobs=[]}}
  async save(){await fs.mkdir(path.dirname(this.state),{recursive:true});await atomicJson(this.state,this.jobs);this.changed(this.jobs)}
  async analyze(value){const c=youtubeCollection(value),online=new OnlineVideo(this.tools);if(!c.playlist){const info=await online.analyze(c.url);return [{...info,id:new URL(info.url).searchParams.get('v'),artist:'',album:'Singles',track:1}]}
  const data=JSON.parse(await run(this.tools.ytdlp,[...online.common().filter((v,i,a)=>v!=='--no-playlist'),'--flat-playlist','--skip-download','--playlist-end','500','--dump-single-json','--',c.url],{env:{...process.env,ELECTRON_RUN_AS_NODE:'1'},timeout:120000}));return (data.entries||[]).filter(e=>/^[A-Za-z0-9_-]{11}$/.test(e.id||'')).map((e,i)=>({id:e.id,url:'https://www.youtube.com/watch?v='+e.id,title:e.title||e.id,artist:e.artist||'',album:e.album||'Singles',track:i+1,durationSeconds:e.duration,allowed:true,availability:'À vérifier lors de l’import'}))}

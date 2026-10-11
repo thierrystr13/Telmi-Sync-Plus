@@ -112,7 +112,7 @@ test('authorized synthetic story export is legacy-reader compatible, deduplicate
  await assert.rejects(exportStory(tools,episode,paths,{authorized:false}))
  const pack=await exportStory(tools,episode,paths,options);assert.equal(await exportStory(tools,episode,paths,options),pack)
  const library=readStories(paths.stories);assert.equal(library.error.length,0);assert.equal(library.stories[0].description,episode.description);assert.equal(library.stories[0].title,episode.title);assert.deepEqual(await fs.readdir(paths.work),[])
- const nodes=JSON.parse(await fs.readFile(path.join(pack,'nodes.json'),'utf8'));assert.equal(nodes.stages.story.audio,'story.mp3')
+ const nodes=JSON.parse(await fs.readFile(path.join(pack,'nodes.json'),'utf8'));assert.equal(nodes.stages.story.audio,'story.mp3');assert.equal(nodes.stages.story.ok,null,'Autoplay ends at the library rather than repeating the entire story')
 })
 test('collection is chronological, navigable through existing story nodes and deduplicated',async()=>{
  const episodes=[2,1].map(n=>({id:String(n).repeat(64),title:'Episode - Partie '+n,source:'Test',description:'Partie '+n,available:true,url:'https://example.org/'+n,duration:1}))

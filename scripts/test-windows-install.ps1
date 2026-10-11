@@ -11,8 +11,8 @@ function Install-Test([string]$File,[string]$Version){
  if($taskProcess.ExitCode -ne 0){throw 'Installateur échoué'}
  $taskEntry=Get-ItemProperty -LiteralPath $taskKey
  if($taskEntry.DisplayVersion -ne $Version){throw ('Version inattendue: '+$taskEntry.DisplayVersion)}
- $taskAll=@(Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'|Where-Object {$_.DisplayName -eq 'TELMI Sync Plus'})
- if($taskAll.Count -ne 1){throw 'Entrée Windows dupliquée'}
+ $taskAll=@(Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'|Where-Object {$_.DisplayName -match '^TELMI Sync Plus(?:\s+\d.*)?$'})
+ if($taskAll.Count -ne 1){throw ('Entrée Windows absente ou dupliquée : '+$taskAll.Count)}
  if((Get-Content -LiteralPath $taskMarker).Trim() -ne 'personal settings preserved'){throw 'Réglages perdus'}
  return $taskEntry
 }

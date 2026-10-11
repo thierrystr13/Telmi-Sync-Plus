@@ -1,13 +1,79 @@
 [
- {"id":"ptites","title":"Les P'tites Histoires","url":"https://feeds.acast.com/public/shows/les-ptites-histoires","publisher":"https://shows.acast.com/les-ptites-histoires","priority":1},
- {"id":"encore","title":"Encore une histoire","url":"https://feeds.acast.com/public/shows/encore-une-histoire","publisher":"https://shows.acast.com/encore-une-histoire","priority":1},
- {"id":"magiques","title":"Histoires magiques","url":"https://feeds.audiomeans.fr/feed/a94564fd-4185-4a1e-9bc4-c784dcb4c4e5.xml","publisher":"https://audio360.fr/podcast/9/histoires-magiques","priority":1},
- {"id":"fondacci","title":"Des histoires en musique","url":"https://feeds.audiomeans.fr/feed/2f301d7e-7dd7-47de-9221-33caea88a5a4.xml","publisher":"https://www.radioclassique.fr","priority":2},
- {"id":"liberte","title":"Contes en liberté","url":"https://feeds.acast.com/public/shows/contes-en-liberte","publisher":"https://shows.acast.com/contes-en-liberte","priority":2},
- {"id":"mille","title":"Mille et une histoires","url":"https://feeds.acast.com/public/shows/19334001-b713-4e78-b490-9a7028c0f412","publisher":"https://shows.acast.com/mille-et-une-histoires","priority":2},
- {"id":"pays","title":"Au pays des histoires","url":"https://feeds.podcastics.com/podcastics/podcasts/rss/2134_92671bf46d4a7099cbc02c8805fedaa8.rss","publisher":"https://www.podcastics.com","priority":2},
- {"id":"aventure","title":"Conte-moi l'aventure","url":"https://feeds.audiomeans.fr/feed/2634f188-47a0-48e1-b4ae-0ac360ed3ac3.xml","publisher":"https://podcasts.audiomeans.fr/conte-moi-l-aventure--0ac360ed3ac3","priority":2},
- {"id":"baba","title":"Les histoires pas-sages de la Baba Yaga","url":"https://feeds.podcastics.com/podcastics/podcasts/rss/4622_3343651ffefc083680983bb01d613319.rss","publisher":"https://www.podcastics.com","priority":3},
- {"id":"kidstory","title":"KIDSTORY","url":"https://feeds.360.audion.fm/AxB4wjUv_HWoti_EgDOZG","publisher":"https://www.studiokodomo.com","priority":3},
- {"id":"envolees","title":"Envolées contées","url":"https://feeds.acast.com/public/shows/envolees-contees","publisher":"https://shows.acast.com/envolees-contees","priority":3}
+  {
+    "id": "ptites",
+    "title": "Les P'tites Histoires",
+    "url": "https://feeds.acast.com/public/shows/les-ptites-histoires",
+    "publisher": "https://taleming.com",
+    "priority": 1
+  },
+  {
+    "id": "encore",
+    "title": "Encore une histoire",
+    "url": "https://feeds.acast.com/public/shows/encore-une-histoire",
+    "publisher": "https://podcast.ausha.co/encore-une-histoire",
+    "priority": 1
+  },
+  {
+    "id": "magiques",
+    "title": "Histoires magiques",
+    "url": "https://feeds.audiomeans.fr/feed/a94564fd-4185-4a1e-9bc4-c784dcb4c4e5.xml",
+    "publisher": "https://www.audio360.fr",
+    "priority": 1
+  },
+  {
+    "id": "fondacci",
+    "title": "Des histoires en musique",
+    "url": "https://feeds.audiomeans.fr/feed/2f301d7e-7dd7-47de-9221-33caea88a5a4.xml",
+    "publisher": "https://www.radioclassique.fr/podcasts/serie/des-histoires-en-musique/",
+    "priority": 2
+  },
+  {
+    "id": "liberte",
+    "title": "Contes en liberté",
+    "url": "https://feeds.acast.com/public/shows/contes-en-liberte",
+    "publisher": "https://contesenliberte.com/",
+    "priority": 2
+  },
+  {
+    "id": "mille",
+    "title": "Mille et une histoires",
+    "url": "https://feeds.acast.com/public/shows/19334001-b713-4e78-b490-9a7028c0f412",
+    "publisher": "https://www.fleuruspresse.com/magazines/pour-les-plus-petits/mille-et-une-histoires",
+    "priority": 2
+  },
+  {
+    "id": "pays",
+    "title": "Au pays des histoires",
+    "url": "https://feeds.podcastics.com/podcastics/podcasts/rss/2134_92671bf46d4a7099cbc02c8805fedaa8.rss",
+    "publisher": "https://www.podcastics.com/podcast/au-pays-des-histoires/",
+    "priority": 2
+  },
+  {
+    "id": "aventure",
+    "title": "Conte-moi l'aventure",
+    "url": "https://feeds.audiomeans.fr/feed/2634f188-47a0-48e1-b4ae-0ac360ed3ac3.xml",
+    "publisher": "https://www.cheriefm.fr/podcasts/conte-moi-l-aventure",
+    "priority": 2
+  },
+  {
+    "id": "baba",
+    "title": "Les histoires pas-sages de la Baba Yaga",
+    "url": "https://feeds.podcastics.com/podcastics/podcasts/rss/4622_3343651ffefc083680983bb01d613319.rss",
+    "publisher": "https://www.lesyeuxdanslespoches.com/baba-yaga",
+    "priority": 3
+  },
+  {
+    "id": "kidstory",
+    "title": "KIDSTORY",
+    "url": "https://feeds.360.audion.fm/AxB4wjUv_HWoti_EgDOZG",
+    "publisher": "https://podcasts.360.audion.fm/en/kidstory-les-meilleurs-contes-pour-enfants-1",
+    "priority": 3
+  },
+  {
+    "id": "envolees",
+    "title": "Envolées contées",
+    "url": "https://feeds.acast.com/public/shows/envolees-contees",
+    "publisher": "https://www.clap.audio/envoleescontees",
+    "priority": 3
+  }
 ]

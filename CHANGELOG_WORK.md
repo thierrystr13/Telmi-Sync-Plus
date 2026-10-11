@@ -103,3 +103,20 @@
   point d'étape. Audit réseau détaillé : FEED_AUDIT.json.
 - Guide d'utilisation et limites : MULTIMEDIA_GUIDE.md. Aucun test physique
   Miyoo, aucun NAS réel ni jeton TMDb validé ; aucune fusion automatique.
+
+
+### Contrôles complémentaires et première CI multimédia
+
+- Audit HTTP de tous les liens audio : 3 312 réponses audio confirmées sur
+  3 312 enclosures. HEAD ou en-têtes GET Range, aucun corps audio lu. Voir
+  RSS_AUDIT.md et FEED_AUDIT.json. Liens éditeurs mis à jour depuis les RSS.
+- Lecture du code stories_reader.h TELMI+ : en fin de récit indépendant, une
+  transition null retourne à la bibliothèque. Correctif du pack pour éviter
+  de rejouer le récit en boucle ; assertion de compatibilité ajoutée.
+- Workflow 38169772069 : compilation et binaires x64 réussis, 49 tests média
+  réussis, test installation échoué car son filtre cherchait DisplayName
+  sans version. Correction du filtre ; aucun installateur annoncé comme
+  entièrement validé à ce stade. Nouvelle CI déclenchée par le correctif.
+- Contrôle visuel Windows indisponible : initialisation Computer Use échoue
+  deux fois « failed to write kernel assets » / chemin introuvable. Aucun
+  test visuel natif annoncé. Les opérations CLI restent accessibles.
