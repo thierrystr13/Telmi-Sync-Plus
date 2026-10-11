@@ -23,7 +23,7 @@ if(Test-Path -LiteralPath (Join-Path $taskBackup 'result.json')){
  if($taskPrevious.status -eq 'verified' -and $taskPrevious.installerSha256 -eq $InstallerSha256 -and $taskEntries.Count -eq 1 -and $taskEntries[0].Version -eq $taskPrevious.version){Write-Output 'Installation deja verifiee; aucune action.';return}
  if($taskPrevious.status -eq 'pending-administrator' -and $taskPrevious.installerSha256 -eq $InstallerSha256 -and !$taskIsAdmin){Write-Output 'Installation utilisateur deja verifiee; ancienne installation machine attend les droits administrateur.';return}
 }
-Get-CimInstance Win32_Process|Where-Object {$_.ExecutablePath -and $taskAllowed -contains (Split-Path $_.ExecutablePath) -and $_.Name -match '^TELMI Sync( Plus)?\.exe$'}|ForEach-Object {& taskkill.exe /PID $_.ProcessId /T /F|Out-Null}
+Get-Process -Name 'Telmi Sync','TELMI Sync Plus' -ErrorAction SilentlyContinue|Where-Object {$_.Path -and $taskAllowed -contains (Split-Path $_.Path)}|ForEach-Object {& taskkill.exe /PID $_.Id /T /F|Out-Null}
 $taskHome=Join-Path $env:USERPROFILE '.telmi'
 $taskMediaRoots=@((Join-Path $taskHome 'stories'),(Join-Path $taskHome 'music'))
 $taskMediaManifest=@(foreach($taskMediaRoot in $taskMediaRoots){if(Test-Path -LiteralPath $taskMediaRoot){Get-ChildItem -LiteralPath $taskMediaRoot -Recurse -File -Force -ErrorAction Stop | ForEach-Object {@{source=$_.FullName;length=$_.Length;modified=$_.LastWriteTimeUtc.Ticks}}}})
