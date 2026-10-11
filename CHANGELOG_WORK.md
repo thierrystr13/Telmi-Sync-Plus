@@ -139,3 +139,41 @@
   données Roaming avec empreintes, conserve/inventorie les bibliothèques sur
   place. Ne prétend pas en avoir réalisé une copie intégrale. Installation
   Program Files conservée tant que l'élévation Windows reste indisponible.
+
+### File persistante et recherche jeunesse
+
+- Le diagnostic CI 38171190299 identifie l'erreur audio intermittente : EPERM
+  lors de deux remplacements simultanés du JSON de la file. Les écritures sont
+  désormais sérialisées par fichier, avec instantané JSON, synchronisation disque,
+  reprise limitée des verrous Windows et nettoyage du seul temporaire créé.
+  Test ajouté : 100 sauvegardes concurrentes, dernier état complet et aucun résidu.
+  Les 50 tests média/détection passent sur le PC Windows.
+- CI 38171194350 : compilation, outils, upgrade et désinstallation passent ;
+  la vérification finale utilisait InstallLocation, absent du registre NSIS.
+  Elle vérifie maintenant le chemin réel via le désinstalleur connu et l'exécutable.
+- Recherche jeunesse commune extraite et testée : accents, mots du résumé/thèmes,
+  âges connus, limites de durée, catégories, sources, favoris et absence de mutation
+  du catalogue. Les récits indépendants précèdent les feuilletons dans les résultats.
+  CI 38171996644 réussie : 51/51 tests, compilation, vérification des exécutables,
+  mise à jour depuis la fixture 0.19.0-dev.2, réglage conservé, désinstallation,
+  installation propre, une entrée Windows et un raccourci. Release de test
+  v0.20.0-test-610f9de publiée avec rapport et SHA-256 ; installateur 300 576 346 octets.
+  Empreinte : b46adde247c2decae49a972261eb19eee5256b1ac2ab4680b1259b414c87a002.
+
+### Installation sur le PC réel
+
+- EXE 0.20.0 téléchargé depuis cette release et empreinte SHA-256 comparée
+  au fichier publié et au digest GitHub, avant toute désinstallation.
+- La maintenance s'est bloquée avant désinstallation sur CIM, puis taskkill.
+  Arrêt de ces tentatives ; détection et arrêt directs via Get-Process/Stop-Process
+  limités aux exécutables TELMI des trois dossiers connus. Syntaxe PowerShell validée.
+- Maintenance réelle terminée : 1 832 fichiers de réglages/données sauvegardés
+  avec SHA-256 ; 20 494 fichiers personnels musique/histoires conservés et vérifiés
+  par taille/date. Pas de copie intégrale des 43,6 Go de .telmi sur C: trop petit.
+- Les versions utilisateur Telmi Sync 0.18.0 et Sync Plus 0.19.0-dev.2 sont
+  réellement désinstallées ; Sync Plus 0.20.0 est installé, une entrée utilisateur.
+- Ancienne version machine 0.19.0-dev.1 dans Program Files conservée : le jeton
+  Windows n'a pas les droits administrateur. Deux entrées globales restent donc
+  présentes. Le résultat local porte pending-administrator, pas verified.
+  Manifeste et sauvegarde sous cache/telmi-sync-before-install-20261011-2247,
+  exclus de Git. Aucun secret/configuration personnelle publié.

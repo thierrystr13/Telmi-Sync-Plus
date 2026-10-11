@@ -1,5 +1,23 @@
 # TELMI Sync+ — reprise du développement
 
+## Dernière livraison vérifiée : 0.20.0
+
+Commit applicatif : 610f9de066c93ac7752555557a9463d2d06f2316.
+CI complète réussie : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38171996644.
+51 tests réussis, build Windows x64, outils embarqués, upgrade et installation propre.
+Release de test : https://github.com/thierrystr13/Telmi-Sync-Plus/releases/tag/v0.20.0-test-610f9de.
+EXE SHA-256 : b46adde247c2decae49a972261eb19eee5256b1ac2ab4680b1259b414c87a002.
+Le rapport INSTALLATION_TEST.json accompagne l'EXE. Les chiffres et builds
+ci-dessous retracent les livraisons antérieures. Lire aussi MULTIMEDIA_GUIDE.md.
+
+PC réel : 0.20.0 installé pour l'utilisateur, anciennes versions utilisateur
+0.18.0/dev.2 désinstallées. Sauvegarde 1 832 fichiers vérifiés SHA-256 et
+20 494 fichiers personnels conservés. Rapport local sous
+cache/telmi-sync-before-install-20261011-2247/result.json dans le dépôt parent.
+Il reste dev.1 dans Program Files : droits administrateur Windows indisponibles.
+Maintenance locale testée avec Get-Process/Stop-Process ; éviter CIM/taskkill
+qui se bloquent sur ce PC. Ne pas annoncer une seule installation globale.
+
 ## Références
 
 - Dépôt indépendant : https://github.com/thierrystr13/Telmi-Sync-Plus
@@ -86,7 +104,7 @@ modules vidéo ; elles incluent également Spotify et rétro gaming.
 Lire MULTIMEDIA_GUIDE.md et CHANGELOG_WORK.md. Modules ajoutés :
 Helpers/Storage.js, Multimedia.js, Multimedia/audio.js, Multimedia/feeds.js,
 Multimedia/sources.json, UI Modules/Multimedia. Tests : test/multimedia.test.js
-(20 nouveaux tests, 49 au total avec vidéos/détection). Les téléchargements
+(22 nouveaux tests, 51 au total avec vidéos/détection et recherche jeunesse). Les téléchargements
 YouTube audio se reprennent après erreur ; les imports RSS échoués repartent
 proprement. Les bibliothèques personnelles restent hors des nettoyages.
 

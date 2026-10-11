@@ -23,11 +23,14 @@ if(Test-Path -LiteralPath (Join-Path $taskBackup 'result.json')){
  if($taskPrevious.status -eq 'verified' -and $taskPrevious.installerSha256 -eq $InstallerSha256 -and $taskEntries.Count -eq 1 -and $taskEntries[0].Version -eq $taskPrevious.version){Write-Output 'Installation deja verifiee; aucune action.';return}
  if($taskPrevious.status -eq 'pending-administrator' -and $taskPrevious.installerSha256 -eq $InstallerSha256 -and !$taskIsAdmin){Write-Output 'Installation utilisateur deja verifiee; ancienne installation machine attend les droits administrateur.';return}
 }
-Get-Process -Name 'Telmi Sync','TELMI Sync Plus' -ErrorAction SilentlyContinue|Where-Object {$_.Path -and $taskAllowed -contains (Split-Path $_.Path)}|ForEach-Object {& taskkill.exe /PID $_.Id /T /F|Out-Null}
+Write-Output 'Arret des processus TELMI identifies.'
+Get-Process -Name 'Telmi Sync','TELMI Sync Plus' -ErrorAction SilentlyContinue|Where-Object {$_.Path -and $taskAllowed -contains (Split-Path $_.Path)}|ForEach-Object {Stop-Process -Id $_.Id -Force -ErrorAction Stop}
+Write-Output 'Inventaire des bibliotheques personnelles.'
 $taskHome=Join-Path $env:USERPROFILE '.telmi'
 $taskMediaRoots=@((Join-Path $taskHome 'stories'),(Join-Path $taskHome 'music'))
 $taskMediaManifest=@(foreach($taskMediaRoot in $taskMediaRoots){if(Test-Path -LiteralPath $taskMediaRoot){Get-ChildItem -LiteralPath $taskMediaRoot -Recurse -File -Force -ErrorAction Stop | ForEach-Object {@{source=$_.FullName;length=$_.Length;modified=$_.LastWriteTimeUtc.Ticks}}}})
 $taskMediaManifest|ConvertTo-Json -Depth 3|Set-Content -LiteralPath (Join-Path $taskBackup 'preserved-library-manifest.json') -Encoding utf8
+Write-Output ('Inventaire termine : '+$taskMediaManifest.Count+' fichiers personnels conserves sur place.')
 $taskData=@((Join-Path $env:APPDATA 'telmi-sync'),(Join-Path $env:APPDATA 'telmi-sync-plus'),(Join-Path $env:APPDATA 'TELMI Sync Plus'))
 if($FullLibraryBackup){$taskData+= $taskHome}else{$taskData+=(Join-Path $taskHome 'parameters');$taskData+=(Join-Path $taskHome 'stores')}
 $taskRequired=0
@@ -38,6 +41,7 @@ $taskManifest=@(foreach($taskSource in $taskData){if(Test-Path -LiteralPath $tas
  foreach($taskFile in Get-ChildItem -LiteralPath $taskSource -Recurse -File -Force){$taskRelative=$taskFile.FullName.Substring($taskSource.Length).TrimStart('\');$taskCopy=Join-Path $taskDestination $taskRelative;$taskHash=(Get-FileHash -LiteralPath $taskFile.FullName -Algorithm SHA256).Hash;if((Get-FileHash -LiteralPath $taskCopy -Algorithm SHA256).Hash -ne $taskHash){throw 'Sauvegarde non conforme, nettoyage abandonne'};@{source=$taskFile.FullName;backup=$taskCopy;sha256=$taskHash}}
 }})
 $taskManifest|ConvertTo-Json -Depth 3|Set-Content -LiteralPath (Join-Path $taskBackup 'backup-manifest.json') -Encoding utf8
+Write-Output ('Sauvegarde verifiee : '+$taskManifest.Count+' fichiers.')
 $taskEntries|ConvertTo-Json -Depth 3|Set-Content -LiteralPath (Join-Path $taskBackup 'installations.json') -Encoding utf8
 foreach($taskEntry in $taskEntries){
  if(!$taskIsAdmin -and $taskEntry.Registry -match 'HKEY_LOCAL_MACHINE'){Write-Output 'Ancienne installation machine conservee : droits administrateur requis.';continue}

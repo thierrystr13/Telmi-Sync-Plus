@@ -4,6 +4,11 @@
 avec un onglet Films & Vidéos pour TELMI+. Histoires, musique, installation et
 Studio restent accessibles dans leurs écrans d'origine.
 
+Version multimédia **0.20.0 de test** : [installateur Windows x64](https://github.com/thierrystr13/Telmi-Sync-Plus/releases/download/v0.20.0-test-610f9de/TELMI-Sync-Plus-Windows-x64.exe).
+[CI réussie, 51 tests et contrôles d'installation](https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38171996644).
+Imports musicaux YouTube/playlist, bibliothèque jeunesse RSS et stockage
+personnalisé : voir [MULTIMEDIA_GUIDE.md](MULTIMEDIA_GUIDE.md).
+
 Ajouter des vidéos → préparation automatique en Équilibré → choisir la pochette
 et corriger le synopsis → sélectionner → Envoyer sur TELMI+.
 
