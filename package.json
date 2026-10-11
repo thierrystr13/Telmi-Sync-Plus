@@ -13,7 +13,7 @@
   "scripts": {
     "test:videos": "node --test test/*.test.js",
     "build:web": "react-scripts build",
-    "build:win": "react-scripts build && electron-builder --win nsis --x64 --publish never",
+    "build:win": "react-scripts build && node scripts/build-windows.js",
     "verify:windows": "node scripts/verify-windows.js",
     "start": "concurrently \"cross-env BROWSER=none react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "react-scripts build && electron-builder --x64",

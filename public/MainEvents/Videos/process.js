@@ -7,9 +7,16 @@ import {encodeArgs, FAT32_MAX, profile} from './contract.js'
 export function run(binary, args, {signal, onLine = () => {}, timeout = 0, maxOutput = 8 * 1024 * 1024, env, capture = true} = {}) {
   return new Promise((resolve, reject) => {
     if (signal?.aborted) return reject(new Error('Opération annulée.'))
-    const child = spawn(binary, args, {windowsHide: true, shell: false, env: env || process.env, stdio: ['ignore', 'pipe', 'pipe']})
+    const child = spawn(binary, args, {windowsHide: true, shell: false, detached: process.platform !== 'win32', env: env || process.env, stdio: ['ignore', 'pipe', 'pipe']})
     let stdout = '', stderr = '', line = '', timedOut = false, overflow = false
-    const stop = () => child.kill('SIGKILL')
+    const stop = () => {
+      if (!child.pid) return
+      if (process.platform === 'win32') {
+        // Also stop yt-dlp's muxer and JS runtime, never leave child processes.
+        const killer = spawn('taskkill.exe', ['/PID', String(child.pid), '/T', '/F'], {windowsHide: true, shell: false, stdio: 'ignore'})
+        killer.once('error', () => child.kill('SIGKILL'))
+      } else {try {process.kill(-child.pid, 'SIGKILL')} catch {child.kill('SIGKILL')}}
+    }
     signal?.addEventListener('abort', stop, {once: true})
     const timer = timeout ? setTimeout(() => {timedOut = true; stop()}, timeout) : null
     child.stdout.on('data', chunk => {

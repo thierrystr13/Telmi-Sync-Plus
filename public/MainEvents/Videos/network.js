@@ -28,7 +28,8 @@ export class OnlineVideo {
     const url = youtubeUrl(value)
     const info = JSON.parse(await run(this.tools.ytdlp, [...this.common(), '--skip-download', '--dump-single-json', '--', url], {...options, env: {...process.env, ELECTRON_RUN_AS_NODE: '1'}, timeout: 120000}))
     const permitted = allowedYoutube(info)
-    return {url, title: String(info.title || '').slice(0, 300), thumbnail: info.thumbnail, durationSeconds: info.duration,
+    const thumbnail = /^https:\/\/(?:[A-Za-z0-9-]+\.)?(?:ytimg\.com|googleusercontent\.com)\//.test(info.thumbnail || '') ? info.thumbnail : undefined
+    return {url, title: String(info.title || '').slice(0, 300), thumbnail, durationSeconds: info.duration,
       description: String(info.description || '').slice(0, 10000), allowed: permitted,
       reason: permitted ? '' : 'Vidéo privée, protégée, en direct ou non disponible. Importez un fichier local obtenu légalement.'}
   }

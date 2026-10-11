@@ -15,6 +15,7 @@ function checkDiskUsage(drive) {
 
 function mainEventTelmiOS(mainWindow) {
   const checkUsbDevices = async () => {
+    try {
     const drives = (await drivelist.list()).reduce((acc, d) => [...acc, ...d.mountpoints.map((p) => p.path)], [])
 
     for (const drive of drives) {
@@ -26,6 +27,10 @@ function mainEventTelmiOS(mainWindow) {
     }
 
     mainWindow.webContents.send('telmios-data', null)
+    } catch (error) {
+      if (!mainWindow.isDestroyed()) mainWindow.webContents.send('telmios-data', null)
+      console.error('Drive detection failed:', error.message)
+    }
   }
 
   setInterval(checkUsbDevices, 5000)

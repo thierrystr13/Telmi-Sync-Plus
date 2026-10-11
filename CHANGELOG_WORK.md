@@ -23,3 +23,15 @@
   Correction : autoriser warnings à l'étape build, sans changer les hooks Studio.
 - Tests synthétiques et chaîne Windows écrits. Résultats à compléter après
   exécution ; aucun succès CI ou matériel revendiqué à ce stade.
+
+### Vérifications et corrections
+
+- 21 tests synthétiques réussis localement et sur le premier runner GitHub.
+- Build React réussi ; trois warnings upstream du Studio conservés.
+- Premier workflow 38135105984 : échec NSIS/7zip sur les symlinks macOS de
+  Piper embarqués par upstream. Correction : filtrage par plateforme à l'aide
+  du même electron-builder, sans retirer les ressources Windows ni les sources
+  macOS/Linux du dépôt.
+- Reconnaissance des lecteurs Windows vérifiée en lecture seule. Les requêtes
+  CIM lentes ont été remplacées par DriveInfo .NET dans le helper Windows.
+- Annulation renforcée pour tuer également les enfants yt-dlp/FFmpeg/JS.

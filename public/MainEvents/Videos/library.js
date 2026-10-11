@@ -115,9 +115,13 @@ export class VideoLibrary {
     } catch (error) {
       entry.status = controller.signal.aborted ? 'cancelled' : 'error'; entry.error = error.message; entry.progress = 0
     } finally {
-      await fs.rm(work, {recursive: true, force: true})
-      await this.save(entry)
-      this.active = null; this.drain()
+      try {
+        await fs.rm(work, {recursive: true, force: true})
+        await this.save(entry)
+      } catch (error) {
+        entry.status = 'error'; entry.error = 'Erreur de stockage bibliothèque : ' + error.message
+        this.changed(this.list())
+      } finally {this.active = null; this.drain()}
     }
   }
   async cancel(uuids) {
