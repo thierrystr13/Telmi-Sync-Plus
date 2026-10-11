@@ -184,3 +184,6 @@
   synthétique 1280x720 : sortie 640x360, 20 fps, H.264 Constrained Baseline,
   audio AAC, durée 1 s, 133 447 octets, variation -75,4 %. Décodage complet
   et hash validés par le moteur de conversion. Aucun film personnel utilisé.
+- CI finale après correctif de maintenance be08faf : workflow 38173645111
+  entièrement réussi, 51 tests et contrôles Windows. Release de test be08faf
+  publiée ; le code applicatif reste celui du binaire 610f9de installé et vérifié.

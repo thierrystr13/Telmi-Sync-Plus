@@ -17,6 +17,10 @@ cache/telmi-sync-before-install-20261011-2247/result.json dans le dépôt parent
 Il reste dev.1 dans Program Files : droits administrateur Windows indisponibles.
 Maintenance locale testée avec Get-Process/Stop-Process ; éviter CIM/taskkill
 qui se bloquent sur ce PC. Ne pas annoncer une seule installation globale.
+CI finale après le correctif de maintenance :
+https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38173645111, réussie.
+Release correspondante : v0.20.0-test-be08faf. Le binaire 610f9de déjà installé
+conserve le même code applicatif ; pas de réinstallation nécessaire pour ce correctif externe.
 
 ## Références
 
