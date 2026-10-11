@@ -74,3 +74,32 @@
 - Aperçu navigateur local inaccessible dans cet environnement : aucune validation
   visuelle complète du renderer ni exécution interactive de l'installateur annoncée.
 - Import YouTube réel, TMDb avec jeton et lecture sur console restent non validés.
+
+
+### 11 octobre 2026 — mission multimédia 0.20.0
+
+- Stockage configurable : six chemins, droits/écriture/espace libre, UNC,
+  délai réseau, aucune migration/suppression implicite.
+- Vidéo : remux sans réencodage si compatible, débits plafonnés à la source,
+  variation de taille mesurée, travaux séparés et téléchargements propres
+  supprimés uniquement après validation et sauvegarde. Profils Économique,
+  Équilibré, Qualité ; format TELMI+ inchangé.
+- Musique : YouTube individuel/playlist, sélection, file persistante, reprise,
+  annulation et doublons ; MP3 128/192/256, conservation des MP3 compatibles,
+  ID3 et pochette, MusicBrainz/CAA/image locale, modifications groupées.
+- Littérature audio : onze RSS validés, grille commune, recherche, filtres,
+  favoris, cache 24 h, import choisi et collections, titre visible sur l'image,
+  packs compatibles avec le lecteur/synchroniseur historique. Droits requis,
+  épisodes abonnés repérés bloqués, aucun France Inter ajouté.
+- Protection : le scanner musical ne supprime plus les MP3 sans pochette ;
+  le scanner d'histoires ne supprime plus les dossiers incomplets ou collisions.
+- Windows : trois installations identifiées (0.18.0, dev.1, dev.2). Script
+  borné aux trois chemins connus, sauvegarde avec empreintes, désinstalleurs,
+  identité et chemin fixes par utilisateur. Nettoyage réel attend l'EXE vérifié.
+- 49 tests synthétiques réussis sous Windows ; compilation React réussie avec
+  uniquement les trois avertissements de hooks déjà présents dans l'amont.
+- CI étendue : test d'installation propre et mise à jour avec fixture de
+  version précédente. Compilation/livraison CI encore à confirmer dans ce
+  point d'étape. Audit réseau détaillé : FEED_AUDIT.json.
+- Guide d'utilisation et limites : MULTIMEDIA_GUIDE.md. Aucun test physique
+  Miyoo, aucun NAS réel ni jeton TMDb validé ; aucune fusion automatique.

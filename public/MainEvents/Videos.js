@@ -8,6 +8,7 @@ import {cardDirectory, listCard, recoverCard, transfer, deleteCard} from './Vide
 import {parseTelmiOSAutorun} from './Helpers/InfFiles.js'
 import {getBinPath} from './Helpers/AppPaths.js'
 import {list as listDrives} from './Helpers/DriveList.js'
+import {storagePaths} from './Helpers/Storage.js'
 
 export default function mainEventVideos(window) {
   const resources = app.isPackaged ? path.join(process.resourcesPath, 'extraResources') : path.join(app.getAppPath(), 'extraResources')
@@ -17,8 +18,9 @@ export default function mainEventVideos(window) {
     return existsSync(bundled) ? bundled : getBinPath(filename)
   }
   const tools = {ffmpeg: binary('ffmpeg'), ffprobe: binary('ffprobe'), ytdlp: binary('yt-dlp'), node: process.execPath}
-  const root = path.join(app.getPath('userData'), 'videos')
-  const library = new VideoLibrary(root, tools, films => {if (!window.isDestroyed()) window.webContents.send('videos-library', films)})
+  const root = storagePaths(undefined,app.getPath('userData')).videos
+  const library = new VideoLibrary(root, tools, films => {if (!window.isDestroyed()) window.webContents.send('videos-library', films)}, {workRoot: storagePaths(undefined,app.getPath('userData')).work})
+  window.syncPlusVideoLibrary = library
   const online = new OnlineVideo(tools)
   const tmdb = new MovieInformation()
   const tokenFile = path.join(app.getPath('userData'), 'tmdb-token.enc')
@@ -85,14 +87,14 @@ export default function mainEventVideos(window) {
   }))
   handler('youtube-analyze', url => exclusive('analyze', signal => online.analyze(url, {signal})))
   handler('youtube-import', (info, authorized, name) => exclusive('download', async signal => {
-    const downloads = path.join(app.getPath('userData'), 'video-downloads')
+    const downloads = storagePaths(undefined,app.getPath('userData')).downloads
     const canonical = (await online.analyze(info.url, {signal})).url
     const videoId = new URL(canonical).searchParams.get('v')
-    const work = path.join(downloads, videoId)
+    const work = path.join(downloads, 'video-' + videoId)
     // Stable download directory permits yt-dlp --continue on retry; successfully
     // imported sources are retained for reconversion, never mixed with originals.
     const result = await online.download({url: canonical}, work, authorized, {signal, onProgress: value => progress('download', value)})
-    const entry = await library.add(result.file, name, {title: result.info.title, synopsis: result.info.description, sourceUrl: canonical})
+    const entry = await library.add(result.file, name, {title: result.info.title, synopsis: result.info.description, sourceUrl: canonical, managedDownload: work})
     return entry.id
   }))
   handler('tmdb-status', async () => {await tokenReady; return !!tmdb.token})
@@ -118,6 +120,6 @@ export default function mainEventVideos(window) {
     if (closing) return
     event.preventDefault(); closing = true
     operation?.controller.abort()
-    library.cancel(library.entries.map(e => e.id)).then(() => library.idle()).finally(() => app.quit())
+    Promise.all([library.cancel(library.entries.map(e => e.id)).then(() => library.idle()), window.syncPlusMediaIdle?.()]).finally(() => app.quit())
   })
 }

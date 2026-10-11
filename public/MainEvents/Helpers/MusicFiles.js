@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import runProcess from '../Processes/RunProcess.js'
-import {rmFile} from './Files.js'
 
 const
   readMusic = (musicsPath) => {
@@ -20,8 +19,7 @@ const
             imagePath = path.join(musicsPath, name + '.png')
 
           if (!fs.existsSync(imagePath)) {
-            rmFile(musicPath)
-            return acc
+            // Preserve a personal MP3 even when its cover is missing.
           }
 
           return [

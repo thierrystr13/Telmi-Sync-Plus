@@ -43,3 +43,8 @@ afficher un avertissement SmartScreen.
   autorisé à télécharger conformément aux conditions applicables.
 - TMDb est optionnel ; saisir manuellement et importer une pochette JPG/PNG
   reste disponible sans compte ni clé.
+
+
+Version multimédia 0.20.0 : voir [MULTIMEDIA_GUIDE.md](MULTIMEDIA_GUIDE.md)
+pour le stockage NAS, les playlists MP3, la bibliothèque jeunesse RSS et
+l'installation Windows unique. Résultats réels dans CHANGELOG_WORK.md.

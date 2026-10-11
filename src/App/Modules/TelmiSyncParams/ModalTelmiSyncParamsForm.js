@@ -9,6 +9,7 @@ import InputSelect from '../../Components/Form/Input/InputSelect.js'
 import ModalTitle from '../../Components/Modal/ModalTitle.js'
 import ModalContent from '../../Components/Modal/ModalContent.js'
 import Form from '../../Components/Form/Form.js'
+import Storage from '../Multimedia/Storage.js'
 
 function ModalTelmiSyncParamsForm({onClose}) {
   const
@@ -44,6 +45,7 @@ function ModalTelmiSyncParamsForm({onClose}) {
       (validation) => {
         return <>
           <ModalContent>
+            <Storage/>
             <InputSelect label={getLocale('audio-microphone-select')}
                          key="audio-microphone-select"
                          id="audio-microphone-select"

@@ -12,8 +12,8 @@ import styles from './Videos.module.scss'
 const statuses = {imported: 'À préparer', queued: 'En attente', converting: 'Compression', ready: 'Prêt', error: 'Erreur', cancelled: 'Annulé', interrupted: 'Interrompu'}
 function tableData(films) {
   return films.map(f => ({...f, cellId: f.id, cellTitle: f.title,
-    cellSubtitle: `${duration(f.durationSeconds)} · ${f.width || '—'} × ${f.height || '—'} · ${bytes(f.originalBytes)} → ${bytes(f.compressedBytes)} · ${statuses[f.status] || 'Sur la carte'}${f.status === 'converting' ? ' ' + Math.round(f.progress * 100) + '%' : ''}`,
-    cellLabelIcon: f.status === 'converting' ? `${Math.round(f.progress * 100)}%` : '', cellLabelIconText: f.error || ''}))
+    cellSubtitle: `${duration(f.durationSeconds)} · ${f.width || '—'} × ${f.height || '—'} · ${bytes(f.originalBytes)} → ${bytes(f.compressedBytes)}${Number.isFinite(f.sizeChangePercent) ? ' (' + (f.sizeChangePercent > 0 ? '+' : '') + f.sizeChangePercent + '%)' : ''}${f.conversionMode === 'remux' ? ' · sans réencodage' : ''} · ${statuses[f.status] || 'Sur la carte'}${f.status === 'converting' ? ' ' + Math.round(f.progress * 100) + '%' : ''}`,
+    cellLabelIcon: f.status === 'converting' ? `${Math.round(f.progress * 100)}%` : '', cellLabelIconText: f.error || f.warning || ''}))
 }
 function toggle(set, value) {
   set(old => Array.isArray(value) ? [...old.filter(v => !value.some(x => x.cellId === v.cellId)), ...value] : old.some(v => v.cellId === value.cellId) ? old.filter(v => v.cellId !== value.cellId) : [...old, value])
@@ -77,7 +77,7 @@ export default function VideosHome() {
       <div className={styles.container}>
         <div className={styles.toolbar}>
           <h1>Films &amp; Vidéos</h1>
-          <label>Compression<select value={profile} onChange={e => setProfile(e.target.value)}><option value="compact">Compact — stockage et lecture légère</option><option value="balanced">Équilibré — recommandé</option><option value="quality">Qualité — taille supérieure</option></select></label>
+          <label>Compression<select value={profile} onChange={e => setProfile(e.target.value)}><option value="compact">Économique — stockage et lecture légère</option><option value="balanced">Équilibré — recommandé</option><option value="quality">Qualité — taille supérieure</option></select></label>
           <button disabled={busy} onClick={() => act(async () => imported(await call('choose', profile)))}>Ajouter des vidéos</button>
           <button disabled={!selection.length || busy} onClick={() => act(() => call('prepare', selection.map(v => v.id), profile))}>Compresser la sélection</button>
           <button onClick={() => act(() => call('cancel'))}>Annuler les traitements</button>
@@ -92,7 +92,7 @@ export default function VideosHome() {
             <Table id="syncplus-pc-videos" titleLeft="Bibliothèque PC" data={localRows} selectedData={selection}
               onSelect={v => toggle(setSelected, v)} onSelectAll={v => setSelected(selection.length === v.length ? [] : v)}
               onEdit={edit} onDelete={v => confirm(false, [v])} onDeleteSelected={() => confirm(false, selection)}/>
-            <div className={styles.queue}>{films.filter(f => f.status !== 'ready').map(f => <div key={f.id}>
+            <div className={styles.queue}>{films.filter(f => f.status !== 'ready' || f.warning).map(f => <div key={f.id}>
               <strong>{f.title}</strong> · {statuses[f.status]} · estimation {bytes(f.estimatedBytes)}
               {f.status === 'converting' && <progress max="1" value={f.progress}/>}
               {(f.error || f.warning) && <p className={styles.error}>{f.error || f.warning}</p>}

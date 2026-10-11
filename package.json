@@ -1,7 +1,7 @@
 {
   "name": "telmi-sync-plus",
   "description": "TELMI Sync+ : histoires, musique, films et vidéos pour TELMI+.",
-  "version": "0.19.0-dev.2",
+  "version": "0.20.0",
   "author": {
     "name": "Franck ALARY",
     "url": "http://dantsu.com/"
@@ -62,7 +62,7 @@
       "target": ["nsis"],
       "artifactName": "TELMI-Sync-Plus-Windows-x64.exe"
     },
-    "nsis": {"oneClick": false, "allowToChangeInstallationDirectory": true},
+    "nsis": {"oneClick": true, "allowToChangeInstallationDirectory": false, "allowElevation": false, "perMachine": false, "deleteAppDataOnUninstall": false},
     "files": ["build/**/*", "public/**/*", "package.json", "LICENSE", "NOTICE.md", "VIDEO_FORMAT.md"],
     "mac": {
       "extendInfo": {

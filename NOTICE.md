@@ -34,3 +34,11 @@ par TMDB. L'utilisateur configure son propre jeton de lecture, conservé avec
 Electron safeStorage. Les images et informations restent soumises aux conditions
 TMDb et aux droits des ayants droit. https://developer.themoviedb.org/docs/faq.
 Pas de clé partagée, pas de recherche YouTube nécessitant une clé API.
+
+
+MusicBrainz : https://musicbrainz.org/doc/About/Data_License (licences des
+métadonnées selon leur nature). Cover Art Archive : https://coverartarchive.org ;
+les pochettes gardent leurs droits. Les onze RSS sont des sources éditoriales
+externes consultées pour leurs métadonnées ; aucun droit de redistribution
+des histoires ou illustrations n'est affirmé. Import réservé aux contenus
+accessibles dont l'utilisateur détient les droits d'import et transfert.

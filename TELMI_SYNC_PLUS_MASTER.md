@@ -79,3 +79,25 @@ Consulter le journal pour les résultats exacts. Corriger toute exécution CI
 échouée avec ses logs. Ne pas fusionner automatiquement. Ne jamais reprendre
 les modifications locales TELMI+ sans isoler et revoir les dépendances de leurs
 modules vidéo ; elles incluent également Spotify et rétro gaming.
+
+
+## Reprise de la mission multimédia 0.20.0
+
+Lire MULTIMEDIA_GUIDE.md et CHANGELOG_WORK.md. Modules ajoutés :
+Helpers/Storage.js, Multimedia.js, Multimedia/audio.js, Multimedia/feeds.js,
+Multimedia/sources.json, UI Modules/Multimedia. Tests : test/multimedia.test.js
+(20 nouveaux tests, 49 au total avec vidéos/détection). Les téléchargements
+YouTube audio se reprennent après erreur ; les imports RSS échoués repartent
+proprement. Les bibliothèques personnelles restent hors des nettoyages.
+
+Le workflow Windows construit une fixture avec les métadonnées 0.19.0-dev.2
+mais le code actuel, puis teste upgrade 0.20.0 et installation propre sur un
+runner isolé. Publie un EXE de test seulement après tous les contrôles.
+Consulter ses logs avant d'annoncer le succès. Nettoyage du PC réel séparé
+via scripts/windows-maintenance.ps1, uniquement après téléchargement/empreinte
+du nouvel EXE. Ne pas exécuter test-windows-install.ps1 sur un PC personnel.
+
+Identité stable : fr.telmi.syncplus, produit TELMI Sync Plus, GUID NSIS
+adefeceb-f6d0-5c3b-91bf-0ca69e035128, installation unique par utilisateur.
+L'ancien TELMI Sync officiel et les anciennes installations tous-utilisateurs
+nécessitent ce nettoyage initial ; les futurs installers gardent l'identité.

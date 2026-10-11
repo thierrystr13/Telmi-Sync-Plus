@@ -12,8 +12,9 @@ export async function atomicJson(file, value) {
   await fs.rename(temporary, file)
 }
 export class VideoLibrary {
-  constructor(root, tools, changed = () => {}) {
+  constructor(root, tools, changed = () => {}, {workRoot = path.join(root, '.work')} = {}) {
     this.root = root; this.tools = tools; this.changed = changed; this.entries = []; this.pending = []; this.active = null
+    this.workRoot = workRoot
     this.ready = this.init()
   }
   directory(uuid) {return path.join(this.root, id(uuid))}
@@ -25,6 +26,7 @@ export class VideoLibrary {
         id(name)
         const dir = this.directory(name)
         await fs.rm(path.join(dir, 'work'), {recursive: true, force: true})
+        await fs.rm(path.join(this.workRoot, 'video-' + name), {recursive: true, force: true})
         const entry = JSON.parse(await fs.readFile(path.join(dir, 'entry.json'), 'utf8'))
         if (entry.id !== name) continue
         if (['queued', 'converting', 'downloading'].includes(entry.status)) {entry.status = 'interrupted'; entry.error = 'Traitement interrompu. Vous pouvez relancer la préparation.'}
@@ -98,7 +100,7 @@ export class VideoLibrary {
     if (this.active || !this.pending.length) return
     const uuid = this.pending.shift(), entry = this.find(uuid), controller = new AbortController()
     this.active = {id: uuid, controller}
-    const dir = this.directory(uuid), work = path.join(dir, 'work')
+    const dir = this.directory(uuid), work = path.join(this.workRoot, 'video-' + uuid)
     try {
       await fs.mkdir(work, {recursive: true})
       entry.status = 'converting'; await this.save(entry)
@@ -114,9 +116,21 @@ export class VideoLibrary {
       if (controller.signal.aborted) throw new Error('Opération annulée.')
       for (const file of ['video.mp4', 'poster.png', 'backdrop.png']) {
         if (file === 'poster.png' && entry.manualCover) continue
-        await fs.rename(path.join(work, file), path.join(dir, file))
+        // Different storage roots may live on different disks or NAS shares.
+        const staging = path.join(dir, file + '.tmp')
+        await fs.copyFile(path.join(work, file), staging)
+        if (await hash(staging) !== await hash(path.join(work, file))) throw new Error('Copie bibliothèque non conforme.')
+        await fs.rename(staging, path.join(dir, file))
       }
-      Object.assign(entry, {status: 'ready', progress: 1, compressedBytes: result.originalBytes, width: result.width, height: result.height, sha256: result.sha256, durationSeconds: result.durationSeconds})
+      Object.assign(entry, {status: 'ready', progress: 1, compressedBytes: result.originalBytes, conversionMode: result.conversionMode, sizeChangePercent: result.sizeChangePercent, width: result.width, height: result.height, sha256: result.sha256, durationSeconds: result.durationSeconds})
+      if (result.originalBytes > entry.originalBytes) entry.warning = 'Le résultat est plus volumineux que la source. Taille mesurée après préparation.'
+      if (entry.managedDownload && path.basename(entry.managedDownload) === 'video-' + new URL(entry.sourceUrl).searchParams.get('v') && path.resolve(path.dirname(entry.source)) === path.resolve(entry.managedDownload)) {
+        const managedSource = entry.source
+        entry.source = path.join(dir, 'video.mp4')
+        await this.save(entry)
+        await fs.rm(managedSource, {force: true})
+        entry.managedDownload = null
+      }
     } catch (error) {
       entry.status = controller.signal.aborted ? 'cancelled' : 'error'; entry.error = error.message; entry.progress = 0
     } finally {

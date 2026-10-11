@@ -4,6 +4,10 @@ const pkg = JSON.parse(await fs.readFile('package.json', 'utf8'))
 const config = {...pkg.build, extends: null, extraResources: pkg.build.extraResources.map(resource => ({
   ...resource, filter: [...resource.filter, '!**/darwin/**/*', '!**/linux/**/*']
 }))}
+if (process.argv.includes('--fixture')) {
+  config.extraMetadata = {version: '0.19.0-dev.2'}
+  config.directories = {...config.directories, output: '.tools/upgrade-fixture'}
+}
 // A separate config path avoids concatenating package.json resource arrays
 // with inline overrides (which can copy the same executable concurrently).
 await fs.mkdir('.tools', {recursive: true})

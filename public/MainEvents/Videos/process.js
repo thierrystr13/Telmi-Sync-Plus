@@ -2,7 +2,7 @@ import {spawn} from 'node:child_process'
 import fs from 'node:fs/promises'
 import {createReadStream} from 'node:fs'
 import {createHash} from 'node:crypto'
-import {encodeArgs, FAT32_MAX, profile} from './contract.js'
+import {encodeArgs, FAT32_MAX, profile, conversionPlan} from './contract.js'
 
 export function run(binary, args, {signal, onLine = () => {}, timeout = 0, maxOutput = 8 * 1024 * 1024, env, capture = true} = {}) {
   return new Promise((resolve, reject) => {
@@ -59,7 +59,9 @@ export async function hash(file, signal) {
 }
 export async function convert(tools, source, output, name, info, options = {}) {
   if (options.signal?.aborted) throw new Error('Opération annulée.')
-  await run(tools.ffmpeg, encodeArgs(source, output, name, info), {...options, capture: false, onLine: line => {
+  const plan=conversionPlan(info,name)
+  const args=plan.mode==='remux'?['-v','error','-nostdin','-y','-i',source,'-map','0:v:0','-map','0:a:0?','-c','copy','-movflags','+faststart','-f','mp4',output]:encodeArgs(source,output,name,info)
+  await run(tools.ffmpeg, args, {...options, capture: false, onLine: line => {
     const match = /^out_time_us=(\d+)/.exec(line)
     if (match) options.onProgress?.(Math.min(0.99, Number(match[1]) / 1e6 / info.durationSeconds))
   }})
@@ -67,10 +69,10 @@ export async function convert(tools, source, output, name, info, options = {}) {
   const p = profile(name)
   if (produced.originalBytes > FAT32_MAX) throw new Error('Résultat supérieur à la limite FAT32 de 4 Gio. Choisissez Compact ou un extrait plus court.')
   if (produced.video.codec_name !== 'h264' || !/baseline/i.test(produced.video.profile) || produced.video.pix_fmt !== 'yuv420p' || produced.width > p.width || produced.height > p.height || produced.fps > p.fps + 0.1 || Math.abs(produced.durationSeconds - info.durationSeconds) > 2) throw new Error('La vidéo produite ne respecte pas le profil Miyoo.')
-  if (info.audio && (!produced.audio || produced.audio.codec_name !== 'aac' || produced.audio.profile !== 'LC' || Number(produced.audio.sample_rate) !== 44100 || produced.audio.channels !== 2)) throw new Error('La piste sonore produite est invalide.')
+  if (info.audio && (!produced.audio || produced.audio.codec_name !== 'aac' || produced.audio.profile !== 'LC' || Number(produced.audio.sample_rate) > 48000 || produced.audio.channels > 2)) throw new Error('La piste sonore produite est invalide.')
   // FFprobe validates the container; decode every stream to catch truncated/corrupt packets.
   await run(tools.ffmpeg, ['-v', 'error', '-xerror', '-nostdin', '-i', output, '-map', '0:v:0', '-map', '0:a:0?', '-f', 'null', '-'], options)
-  return {...produced, sha256: await hash(output, options.signal)}
+  return {...produced, conversionMode:plan.mode, sizeChangePercent:Math.round((produced.originalBytes/info.originalBytes-1)*1000)/10, sha256: await hash(output, options.signal)}
 }
 export async function image(tools, source, output, width, height, {video = false, duration = 0, ...options} = {}) {
   await run(tools.ffmpeg, ['-hide_banner', '-nostdin', '-y', '-protocol_whitelist', 'file,pipe', ...(video ? ['-ss', String(Math.min(30, duration / 3))] : []), '-i', source,

@@ -1,40 +1,41 @@
 import * as path from 'path'
 import {createPathDirectories, rmDirectory} from './Files.js'
 import {getShortPath} from './Paths.js'
+import {storagePaths} from './Storage.js'
 
 function homePaths(homeLongPath) {
   const
     homePath = getShortPath(homeLongPath),
-    TMP_PATH = path.join(homePath, '.telmi', 'tmp'),
     STORES_PATH = path.join(homePath, '.telmi', 'stores'),
-    STORIES_PATH = path.join(homePath, '.telmi', 'stories'),
-    MUSIC_PATH = path.join(homePath, '.telmi', 'music'),
     BIN_PATH = path.join(homePath, '.telmi', 'bin'),
     PARAMETERS_PATH = path.join(homePath, '.telmi', 'parameters')
 
   return {
     initAppPaths: () => {
-      createPathDirectories(STORIES_PATH)
-      createPathDirectories(MUSIC_PATH)
+      createPathDirectories(storagePaths(homeLongPath).stories)
+      createPathDirectories(storagePaths(homeLongPath).music)
     },
 
     initTmpPath: (dirName) => {
-      const dirPath = path.join(TMP_PATH, dirName)
+      const dirPath = path.join(storagePaths(homeLongPath).work, dirName)
       rmDirectory(dirPath)
       createPathDirectories(dirPath)
       return dirPath
     },
 
     getTmpPath: (dirName) => {
-      return dirName === undefined ? TMP_PATH : path.join(TMP_PATH, dirName)
+      const root = storagePaths(homeLongPath).work
+      return dirName === undefined ? root : path.join(root, dirName)
     },
 
     getStoriesPath: (dirStory) => {
-      return dirStory === undefined ? STORIES_PATH : path.join(STORIES_PATH, dirStory)
+      const root = storagePaths(homeLongPath).stories
+      return dirStory === undefined ? root : path.join(root, dirStory)
     },
 
     getMusicPath: (fileAudio) => {
-      return fileAudio === undefined ? MUSIC_PATH : path.join(MUSIC_PATH, fileAudio)
+      const root = storagePaths(homeLongPath).music
+      return fileAudio === undefined ? root : path.join(root, fileAudio)
     },
 
     getBinPath: (filePath) => {
