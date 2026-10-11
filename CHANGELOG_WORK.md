@@ -177,3 +177,10 @@
   présentes. Le résultat local porte pending-administrator, pas verified.
   Manifeste et sauvegarde sous cache/telmi-sync-before-install-20261011-2247,
   exclus de Git. Aucun secret/configuration personnelle publié.
+- Contrôle de l'installation réelle : exécutable version 0.20.0.0,
+  FFmpeg/FFprobe/yt-dlp présents. Relance de la maintenance avec le même SHA
+  et la même sauvegarde : aucune opération répétée (idempotence vérifiée).
+- Conversion supplémentaire avec les outils du dossier installé, sur média
+  synthétique 1280x720 : sortie 640x360, 20 fps, H.264 Constrained Baseline,
+  audio AAC, durée 1 s, 133 447 octets, variation -75,4 %. Décodage complet
+  et hash validés par le moteur de conversion. Aucun film personnel utilisé.
