@@ -21,7 +21,7 @@ export function allowedYoutube(info) {
 export class OnlineVideo {
   constructor(tools) {this.tools = tools}
   common() {
-    return ['--ignore-config', '--no-playlist', '--no-warnings', '--no-check-updates', '--no-cookies', '--no-cache-dir',
+    return ['--ignore-config', '--no-playlist', '--no-warnings', '--no-cookies', '--no-cache-dir',
       '--js-runtimes', `node:${this.tools.node}`, '--ffmpeg-location', path.dirname(this.tools.ffmpeg)]
   }
   async analyze(value, options = {}) {

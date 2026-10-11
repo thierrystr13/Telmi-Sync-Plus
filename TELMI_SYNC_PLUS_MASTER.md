@@ -24,7 +24,7 @@ Les données historiques histoires/musiques restent dans `.telmi` comme upstream
 Une copie Sync+ et l'application officielle peuvent coexister (appId distinct).
 
 Windows : le paquet drivelist 11.2.0 ne publie pas le binaire N-API nécessaire ;
-DriveList.js utilise CIM Windows via une commande PowerShell fixe, sans shell
+DriveList.js utilise DriveInfo .NET via une commande PowerShell fixe, sans shell
 construit à partir de données utilisateur. Linux/macOS gardent drivelist officiel.
 Le build Windows désactive npmRebuild et installe sans scripts natifs, puis
 installe Electron explicitement. Aucun Visual Studio n'est nécessaire.

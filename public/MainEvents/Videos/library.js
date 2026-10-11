@@ -48,7 +48,12 @@ export class VideoLibrary {
     await atomicJson(path.join(this.directory(entry.id), 'entry.json'), entry)
     this.changed(this.list())
   }
-  async add(source, name = 'balanced', extra = {}, queue = true) {
+  add(...args) {
+    const job = (this.importing || Promise.resolve()).then(() => this.importOne(...args))
+    this.importing = job.catch(() => {})
+    return job
+  }
+  async importOne(source, name = 'balanced', extra = {}, queue = true) {
     await this.ready
     source = path.resolve(source)
     const info = await probe(this.tools.ffprobe, source)

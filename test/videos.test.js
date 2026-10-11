@@ -7,10 +7,10 @@ import {run, probe, convert, image, hash} from '../public/MainEvents/Videos/proc
 import {PROFILES, metadata, filename, estimate, FAT32_MAX, utf8} from '../public/MainEvents/Videos/contract.js'
 import {VideoLibrary, atomicJson} from '../public/MainEvents/Videos/library.js'
 import {cardDirectory, listCard, transfer, deleteCard, recoverCard} from '../public/MainEvents/Videos/card.js'
-import {youtubeUrl, allowedYoutube, MovieInformation} from '../public/MainEvents/Videos/network.js'
+import {youtubeUrl, allowedYoutube, MovieInformation, OnlineVideo} from '../public/MainEvents/Videos/network.js'
 
 const bin = name => process.env[name.toUpperCase() + '_PATH'] || path.resolve('extraResources/video-tools', name + (process.platform === 'win32' ? '.exe' : ''))
-const tools = {ffmpeg: bin('ffmpeg'), ffprobe: bin('ffprobe')}
+const tools = {ffmpeg: bin('ffmpeg'), ffprobe: bin('ffprobe'), ytdlp: bin('yt-dlp'), node: process.execPath}
 const root = path.resolve('test-output', randomUUID())
 let source, info, library, film, card, sd
 before(async () => {
@@ -190,6 +190,13 @@ test('TMDb requires configured credentials; manual workflows never require them'
   const tmdb = new MovieInformation()
   await assert.rejects(tmdb.search('Test'), /jeton/)
   assert.equal(await tmdb.poster('/../../secret', path.join(root, 'forbidden.jpg')), false)
+})
+test('bundled yt-dlp accepts all configured arguments and refuses unauthorized downloads', async () => {
+  const online = new OnlineVideo(tools)
+  const help = await run(tools.ytdlp, [...online.common(), '--help'], {timeout: 30000})
+  assert.match(help, /Usage:/)
+  await assert.rejects(online.download({url: 'https://youtu.be/abcdefghijk'}, path.join(root, 'download'), false), /autorisation/)
+  await assert.rejects(online.analyze('https://evil.test/video'), /YouTube/)
 })
 test('PC deletion removes prepared copies only', async () => {
   const digest = await hash(source)

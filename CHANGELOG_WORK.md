@@ -35,3 +35,9 @@
 - Reconnaissance des lecteurs Windows vérifiée en lecture seule. Les requêtes
   CIM lentes ont été remplacées par DriveInfo .NET dans le helper Windows.
 - Annulation renforcée pour tuer également les enfants yt-dlp/FFmpeg/JS.
+- Vérification réelle des arguments yt-dlp : suppression d'une option inexistante,
+  ajout d'un test du binaire embarqué sans téléchargement de contenu tiers.
+- Deuxième workflow 38135515010 : échec de copie EBUSY. L'override inline de
+  electron-builder concaténait les ressources avec celles de package.json.
+  Correction : configuration Windows complète générée dans un fichier séparé,
+  sans ressources en double. 22 tests locaux réussis.
