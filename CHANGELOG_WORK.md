@@ -41,3 +41,17 @@
   electron-builder concaténait les ressources avec celles de package.json.
   Correction : configuration Windows complète générée dans un fichier séparé,
   sans ressources en double. 22 tests locaux réussis.
+
+### Livraison GitHub vérifiée
+
+- Workflow 38135692111 au commit d774084 : succès confirmé, 22 tests média/SD,
+  compilation NSIS Windows x64 et vérification des binaires/outils embarqués.
+- Artifact : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38135692111/artifacts/11700529025
+  (archive contenant TELMI-Sync-Plus-Windows-x64.exe, expiration 10 novembre 2026).
+- PR de développement en brouillon : https://github.com/thierrystr13/Telmi-Sync-Plus/pull/1
+  Aucun merge et aucune modification du dépôt officiel ou du main TELMI+.
+- Correction finale de l'affichage de la case d'autorisation YouTube et du
+  rechargement d'une pochette après une image initialement absente.
+- Aperçu navigateur local inaccessible dans cet environnement : aucune validation
+  visuelle complète du renderer ni exécution interactive de l'installateur annoncée.
+- Import YouTube réel, TMDb avec jeton et lecture sur console restent non validés.

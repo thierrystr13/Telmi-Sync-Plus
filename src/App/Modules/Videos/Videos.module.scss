@@ -7,6 +7,7 @@
 .toolbar,.cardToolbar {display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
 .toolbar label,.cardToolbar label,.fields label,.tmdb label {display:flex; flex-direction:column; gap:5px; font-size:13px;}
 .container input,.container select,.editor input,.editor textarea {background:$purple2; color:white; border:1px solid $white30; border-radius:5px; padding:8px;}
+.container input[type=checkbox] {appearance:auto; width:18px; height:18px; padding:0; accent-color:$orange; vertical-align:middle;}
 .panels {display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1; min-height:340px;}
 .panel {display:flex; flex-direction:column; min-width:0; background:$black20; border-radius:12px; padding:12px; min-height:320px;}
 .panel > div:first-child {flex-shrink:0;}

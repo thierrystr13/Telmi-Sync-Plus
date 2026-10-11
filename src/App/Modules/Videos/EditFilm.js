@@ -16,7 +16,7 @@ export default function EditFilm({film, onClose}) {
     <ModalTitle>Informations du film</ModalTitle>
     <div className={styles.editorBody}>
       <div className={styles.poster}>
-        <img src={film.image + '&edit=' + imageVersion} alt="Pochette du film" onError={e => {e.currentTarget.style.visibility = 'hidden'}}/>
+        <img src={film.image + '&edit=' + imageVersion} alt="Pochette du film" onLoad={e => {e.currentTarget.style.visibility = 'visible'}} onError={e => {e.currentTarget.style.visibility = 'hidden'}}/>
         <button disabled={busy} onClick={() => act(async () => {await call('cover', film.id); setImageVersion(imageVersion + 1)})}>Choisir une pochette JPG / PNG</button>
         <p>{duration(film.durationSeconds)} · {film.width} × {film.height}</p>
         <p>Original : {bytes(film.originalBytes)}<br/>Préparé : {bytes(film.compressedBytes)}</p>

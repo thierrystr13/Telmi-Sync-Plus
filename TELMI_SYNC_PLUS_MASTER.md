@@ -45,6 +45,12 @@ exécution des outils empaquetés ; les tests média génèrent leurs sources li
 
 ## Limites à suivre
 
+Livraison initiale vérifiée : 22 tests et build Windows réussis au commit d774084,
+run https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38135692111.
+Artifact téléchargeable depuis la page du run, conservé 30 jours. PR en brouillon :
+https://github.com/thierrystr13/Telmi-Sync-Plus/pull/1. Toute correction ultérieure
+doit passer à nouveau ce workflow ; consulter le dernier run de la branche.
+
 - Les sources vidéo TELMI+ existent localement mais ne sont pas dans main
   GitHub : voir VIDEO_FORMAT.md. Aucun matériel Miyoo testé dans cette session.
 - YouTube dépend du service et de yt-dlp ; pas de cookies/authentification ni
