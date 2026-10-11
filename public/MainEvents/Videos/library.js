@@ -5,11 +5,28 @@ import {randomUUID} from 'node:crypto'
 import {id, estimate, metadata, filename, FAT32_MAX} from './contract.js'
 import {probe, convert, image, hash} from './process.js'
 
-export async function atomicJson(file, value) {
+const jsonWrites = new Map()
+export function atomicJson(file, value) {
+  const key = process.platform === 'win32' ? path.resolve(file).toLowerCase() : path.resolve(file)
+  const contents = JSON.stringify(value, null, 2)
+  const operation = (jsonWrites.get(key) || Promise.resolve()).catch(() => {}).then(() => writeJson(file, contents))
+  jsonWrites.set(key, operation)
+  const finished = () => {if (jsonWrites.get(key) === operation) jsonWrites.delete(key)}
+  operation.then(finished, finished)
+  return operation
+}
+async function writeJson(file, contents) {
   const temporary = file + '.' + randomUUID() + '.tmp'
-  const handle = await fs.open(temporary, 'w')
-  try {await handle.writeFile(JSON.stringify(value, null, 2), 'utf8'); await handle.sync()} finally {await handle.close()}
-  await fs.rename(temporary, file)
+  try {
+    const handle = await fs.open(temporary, 'wx')
+    try {await handle.writeFile(contents, 'utf8'); await handle.sync()} finally {await handle.close()}
+    for (let attempt = 0; ; attempt++) {
+      try {await fs.rename(temporary, file); break} catch (error) {
+        if (!['EPERM', 'EACCES', 'EBUSY'].includes(error.code) || attempt >= 6) throw error
+        await new Promise(resolve => setTimeout(resolve, Math.min(1000, 50 * 2 ** attempt)))
+      }
+    }
+  } finally {await fs.rm(temporary, {force: true}).catch(() => {})}
 }
 export class VideoLibrary {
   constructor(root, tools, changed = () => {}, {workRoot = path.join(root, '.work')} = {}) {

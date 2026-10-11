@@ -14,18 +14,21 @@ function Install-Test([string]$File,[string]$Version){
  $taskAll=@(Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'|Where-Object {$_.DisplayName -match '^TELMI Sync Plus(?:\s+\d.*)?$'})
  if($taskAll.Count -ne 1){throw ('Entrée Windows absente ou dupliquée : '+$taskAll.Count)}
  if((Get-Content -LiteralPath $taskMarker).Trim() -ne 'personal settings preserved'){throw 'Réglages perdus'}
+ $taskLocation=Split-Path ([regex]::Match($taskEntry.UninstallString,'^"([^"]+)"').Groups[1].Value)
+ if($taskLocation -ne (Join-Path $env:LOCALAPPDATA 'Programs\TELMI Sync Plus')){throw ('Chemin installé inattendu : '+$taskLocation)}
+ $taskEntry|Add-Member -NotePropertyName VerifiedLocation -NotePropertyValue $taskLocation
  return $taskEntry
 }
 $taskOld=Install-Test $Previous '0.19.0-dev.2'
 $taskNew=Install-Test $Installer '0.20.0'
-if($taskOld.InstallLocation -ne $taskNew.InstallLocation){throw 'Chemin modifié pendant la mise à jour'}
+if($taskOld.VerifiedLocation -ne $taskNew.VerifiedLocation){throw 'Chemin modifié pendant la mise à jour'}
 $taskUninstall=[regex]::Match($taskNew.UninstallString,'^"([^"]+)"').Groups[1].Value
 if((Split-Path $taskUninstall) -ne (Join-Path $env:LOCALAPPDATA 'Programs\TELMI Sync Plus')){throw ('Désinstalleur inattendu : '+$taskUninstall)}
 $taskProcess=Start-Process -FilePath $taskUninstall -ArgumentList @('/S','/currentuser') -PassThru -Wait -WindowStyle Hidden
 for($taskAttempt=0;$taskAttempt -lt 30 -and (Test-Path -LiteralPath $taskKey);$taskAttempt++){Start-Sleep -Seconds 1}
 if(Test-Path -LiteralPath $taskKey){throw 'Désinstallation incomplète'}
 $taskClean=Install-Test $Installer '0.20.0'
-$taskExe=Join-Path $taskClean.InstallLocation 'TELMI Sync Plus.exe'
+$taskExe=Join-Path $taskClean.VerifiedLocation 'TELMI Sync Plus.exe'
 if(!(Test-Path -LiteralPath $taskExe)){throw 'Exécutable installé absent'}
 $taskShortcuts=@(Get-ChildItem (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs') -Filter '*TELMI Sync Plus*.lnk' -Recurse)
 if($taskShortcuts.Count -ne 1){throw 'Raccourcis de menu Démarrer dupliqués ou absents'}

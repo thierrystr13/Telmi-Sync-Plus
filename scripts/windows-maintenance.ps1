@@ -25,7 +25,8 @@ if(Test-Path -LiteralPath (Join-Path $taskBackup 'result.json')){
 }
 Get-CimInstance Win32_Process|Where-Object {$_.ExecutablePath -and $taskAllowed -contains (Split-Path $_.ExecutablePath) -and $_.Name -match '^TELMI Sync( Plus)?\.exe$'}|ForEach-Object {& taskkill.exe /PID $_.ProcessId /T /F|Out-Null}
 $taskHome=Join-Path $env:USERPROFILE '.telmi'
-$taskMediaManifest=@(Get-ChildItem -LiteralPath $taskHome -Recurse -File -Force -ErrorAction SilentlyContinue | ForEach-Object {@{source=$_.FullName;length=$_.Length;modified=$_.LastWriteTimeUtc.Ticks}})
+$taskMediaRoots=@((Join-Path $taskHome 'stories'),(Join-Path $taskHome 'music'))
+$taskMediaManifest=@(foreach($taskMediaRoot in $taskMediaRoots){if(Test-Path -LiteralPath $taskMediaRoot){Get-ChildItem -LiteralPath $taskMediaRoot -Recurse -File -Force -ErrorAction Stop | ForEach-Object {@{source=$_.FullName;length=$_.Length;modified=$_.LastWriteTimeUtc.Ticks}}}})
 $taskMediaManifest|ConvertTo-Json -Depth 3|Set-Content -LiteralPath (Join-Path $taskBackup 'preserved-library-manifest.json') -Encoding utf8
 $taskData=@((Join-Path $env:APPDATA 'telmi-sync'),(Join-Path $env:APPDATA 'telmi-sync-plus'),(Join-Path $env:APPDATA 'TELMI Sync Plus'))
 if($FullLibraryBackup){$taskData+= $taskHome}else{$taskData+=(Join-Path $taskHome 'parameters');$taskData+=(Join-Path $taskHome 'stores')}

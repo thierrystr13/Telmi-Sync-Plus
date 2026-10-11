@@ -9,6 +9,7 @@ import {conversionPlan} from '../public/MainEvents/Videos/contract.js'
 import {audioProbe,convertMp3,taggedMusic,musicFilename,youtubeCollection,AudioImports} from '../public/MainEvents/Multimedia/audio.js'
 import {parseFeed,durationValue,StoryCatalog,exportStory,exportCollection,publicFetch} from '../public/MainEvents/Multimedia/feeds.js'
 import {readStories} from '../public/MainEvents/Helpers/Stories.js'
+import {atomicJson} from '../public/MainEvents/Videos/library.js'
 
 const root=path.resolve('test-output',randomUUID()),bin=n=>process.env[n.toUpperCase()+'_PATH']||path.resolve('extraResources/video-tools',n+(process.platform==='win32'?'.exe':''))
 const tools={ffmpeg:bin('ffmpeg'),ffprobe:bin('ffprobe'),ytdlp:bin('yt-dlp'),node:process.execPath}
@@ -20,6 +21,12 @@ before(async()=>{
  await run(tools.ffmpeg,['-v','error','-y','-f','lavfi','-i','color=c=blue:s=200x300','-frames:v','1',cover])
 })
 after(()=>fs.rm(root,{recursive:true,force:true}))
+test('100 concurrent queue saves remain atomic and persist the last state on Windows',async()=>{
+ const file=path.join(root,'concurrent.json')
+ await Promise.all(Array.from({length:100},(_,sequence)=>atomicJson(file,{sequence,entries:[sequence],text:'État complet'})))
+ assert.deepEqual(JSON.parse(await fs.readFile(file,'utf8')),{sequence:99,entries:[99],text:'État complet'})
+ assert.ok(!(await fs.readdir(root)).some(n=>n.startsWith('concurrent.json.')&&n.endsWith('.tmp')))
+})
 test('storage validates write access and free space; paths persist without moving originals',async()=>{
  const personal=path.join(root,'personal-library');await fs.mkdir(personal);await fs.writeFile(path.join(personal,'keep.txt'),'keep')
  const s=await checkStorage(personal);assert.ok(s.available>0);assert.equal(s.writable,true)
