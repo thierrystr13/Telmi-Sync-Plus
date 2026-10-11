@@ -19,6 +19,8 @@ import ButtonIconGear from '../../Components/Buttons/Icons/ButtonIconGear.js'
 import TopButtonNavigation from './TopButtonNavigation.js'
 import ButtonLangChooser from '../../Components/Locale/ButtonLangChooser.js'
 import ButtonUpdate from './ButtonUpdate.js'
+import ButtonVideos from '../../Modules/Videos/ButtonVideos.js'
+import {routeVideos} from '../../Modules/Videos/Routes.js'
 import ModalTelmiSyncParamsForm from '../../Modules/TelmiSyncParams/ModalTelmiSyncParamsForm.js'
 import ButtonIconTextSmartphone from '../../Components/Buttons/IconsTexts/ButtonIconTextSmartphone.js'
 
@@ -57,6 +59,10 @@ function TopBar({currentModule}) {
         <TopButtonNavigation buttonComponent={ButtonIconTextStore}
                              text={getLocale('stores')}
                              route={routeStores}
+                             currentModule={currentModule}/>
+        <TopButtonNavigation buttonComponent={ButtonVideos}
+                             text="Films & Vidéos"
+                             route={routeVideos}
                              currentModule={currentModule}/>
         <TopButtonNavigation buttonComponent={ButtonIconTextRSSFeed}
                              text={getLocale('podcasts')}

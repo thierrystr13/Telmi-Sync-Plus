@@ -18,6 +18,7 @@ import mainEventAudio from './MainEvents/Audio.js'
 import mainEventFileManager from './MainEvents/FilesManager.js'
 import mainEventTableState from './MainEvents/TableState.js'
 import mainEventServer from './MainEvents/Server.js'
+import mainEventVideos from './MainEvents/Videos.js'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -57,6 +58,7 @@ function createWindow() {
   mainEventAudio(mainWindow)
   mainEventTableState(mainWindow)
   mainEventServer(mainWindow)
+  mainEventVideos(mainWindow)
 
   return mainWindow
 }

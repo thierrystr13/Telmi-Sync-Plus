@@ -4,6 +4,7 @@ import RSSFeed from '../Modules/RSSFeed/Home.js'
 import DownloadFFmpeg from '../Modules/DownloadFFmpeg/Home.js'
 import Studio from '../Modules/Studio/Home.js'
 import AndroidApp from '../Modules/AndroidApp/Home.js'
+import Videos from '../Modules/Videos/Home.js'
 
 
-export {Synchronize, Stores, RSSFeed, DownloadFFmpeg, Studio, AndroidApp}
+export {Synchronize, Stores, RSSFeed, DownloadFFmpeg, Studio, AndroidApp, Videos}

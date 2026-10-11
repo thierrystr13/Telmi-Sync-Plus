@@ -1,5 +1,5 @@
 import {ipcMain} from 'electron'
-import * as drivelist from 'drivelist'
+import * as drivelist from './Helpers/DriveList.js'
 import {parseTelmiOSAutorun} from './Helpers/InfFiles.js'
 import {readTelmiOSParameters, saveTelmiOSParameters} from './Helpers/TelmiOS.js'
 import runProcess from './Processes/RunProcess.js'

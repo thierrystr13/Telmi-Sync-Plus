@@ -9,7 +9,8 @@ const
     return process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'
   },
   getFFmpegFilePath = () => {
-    return getBinPath(getFFmpegFileName())
+    const bundled = path.join(getExtraResourcesPath(), 'video-tools', getFFmpegFileName())
+    return fs.existsSync(bundled) ? bundled : getBinPath(getFFmpegFileName())
   },
   getAudioInfos = (srcFile) => {
     return new Promise((resolve, reject) => {

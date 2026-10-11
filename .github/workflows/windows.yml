@@ -1,0 +1,54 @@
+name: Windows x64
+on:
+  push:
+    branches: [master, dev/films-videos]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: yarn
+      - name: Install official lockfile dependencies
+        run: |
+          npm install --global yarn@1.22.22
+          yarn install --frozen-lockfile --ignore-scripts
+          node node_modules/electron/install.js
+      - name: Download and verify bundled media tools
+        shell: pwsh
+        run: ./scripts/download-tools.ps1
+      - name: Synthetic media and SD compatibility tests
+        run: yarn test:videos
+      - name: Build Windows x64 installer
+        env:
+          # Upstream CRA contains three existing exhaustive-deps warnings.
+          # ESLint errors still fail; do not alter Studio hooks for video work.
+          CI: 'false'
+        run: yarn build:win
+      - name: Verify Windows binary and bundled dependencies
+        run: yarn verify:windows
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TELMI-Sync-Plus-Windows-x64
+          path: electron/dist/TELMI-Sync-Plus-Windows-x64.exe
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-diagnostics
+          path: electron/dist/builder-debug.yml
+          if-no-files-found: ignore
