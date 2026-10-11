@@ -62,10 +62,10 @@ function TelmiOSDetected ({telmiOS, onTransfer, children}) {
           }
         </span>
         <span className={styles.telmiOSTitleIcons}>
-            <button title="Mettre à jour Telmi OS (action explicite)" onClick={() => addModal(key => {
+            {!telmiOS.telmiOS.isPlus && <button title="Mettre à jour Telmi OS (action explicite)" onClick={() => addModal(key => {
               const modal = <ModalElectronTaskVisualizer key={key} taskName="telmios-update" dataSent={[telmiOS]} onClose={() => rmModal(modal)}/>
               return modal
-            })}>Mise à jour OS</button>
+            })}>Mise à jour OS</button>}
             <ButtonIconGear className={styles.telmiOSTitleIcon}
                             title={getLocale('telmios-parameters')}
                             onClick={onTelmiOSParams}/>

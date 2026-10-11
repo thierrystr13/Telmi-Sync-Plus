@@ -10,6 +10,15 @@
 
 ## Architecture
 
+DEV2 corrige la détection Windows signalée par l'utilisateur sur SD E: DEV11.
+DriveList utilise fs.statfs sur les volumes montés Windows, cache partagé 3 s,
+timeout 3 s par lecteur. PowerShell reste uniquement dans le dialogue de formatage
+historique, afin d'exiger une classification physique amovible réelle.
+InfFiles reconnaît aussi runtime + storyTeller sans autorun et lit la version
+DEV installée ; le bouton de mise à jour upstream est masqué pour TELMI+.
+Les paramètres absents/corrompus ne bloquent plus la détection (défauts en mémoire).
+29 tests automatisés ; voir le dernier workflow avant de télécharger l'installateur.
+
 `src/App/Modules/Videos/` est une route principale du routeur React officiel.
 Elle réutilise TopBar, AppContainer, DropFiles, Table et le gestionnaire de
 modales. `public/MainEvents/Videos.js` gère les dialogues natifs et IPC bornés

@@ -14,6 +14,7 @@ async function main (drive) {
   if (telmiOS === null) {
     return process.stdout.write('telmios-not-found')
   }
+  if (telmiOS.isPlus) return process.stdout.write('success')
 
   const json = await requestJson('https://api.github.com/repos/DantSu/Telmi-story-teller/releases', {})
 

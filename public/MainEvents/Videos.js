@@ -27,7 +27,7 @@ export default function mainEventVideos(window) {
     if (safeStorage.isEncryptionAvailable()) tmdb.token = safeStorage.decryptString(buffer)
   }).catch(() => {})
   const progress = (kind, value) => {if (!window.isDestroyed()) window.webContents.send('videos-progress', {kind, value})}
-  const recognize = async drive => parseTelmiOSAutorun(drive) !== null && existsSync(path.join(drive, 'TELMI_PLUS'))
+  const recognize = async drive => parseTelmiOSAutorun(drive)?.isPlus === true
   const directory = async drive => {
     const drives = await listDrives()
     if (!drives.some(d => d.mountpoints.some(m => path.resolve(m.path).toLowerCase() === path.resolve(drive).toLowerCase()))) throw new Error('Carte déconnectée ou lecteur inconnu.')

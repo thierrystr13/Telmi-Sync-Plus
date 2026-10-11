@@ -1,5 +1,24 @@
 # Journal TELMI Sync+
 
+## 2026-10-11 — correctif DEV2 : détection Windows / TELMI+ DEV11
+
+- Signalement utilisateur : aucune carte et erreur PowerShell dans Films & Vidéos.
+- Lecture seule de la SD E: : autorun TelmiOS-v1.10.4, version système
+  v1.10.4-TELMIPLUS-DEV11-RETROGAMING-VISUEL, TELMI_PLUS et paramètres valides.
+- Ancien détecteur reproduit en échec ; même avec 60 s, PowerShell expire sur ce PC.
+  fs.statfs accède correctement à E:. Détection courante désormais native Node,
+  partagée entre modules, cache court et 3 s maximum par lecteur illisible.
+  PowerShell n'est utilisé que par le dialogue historique de création/formatage,
+  où le type physique amovible reste obligatoire (jamais déduit d'une lettre).
+- Reconnaissance par runtime + storyTeller sans dépendre d'autorun ; version DEV
+  lue dans .tmp_update/telmiVersion/version.txt. Paramètres manquants/corrompus
+  tolérés en mémoire, aucune écriture à la détection.
+- Mise à jour OS officielle désactivée pour les cartes TELMI+, afin de conserver
+  les ajouts personnalisés. Erreurs SD séparées des erreurs import/YouTube.
+- 28 tests synthétiques/détection réussis localement avant remplacement natif ;
+  un 29e test vérifie les lecteurs natifs et délais. Nouveau build CI à vérifier.
+
+
 ## 2026-10-11 — développement initial
 
 - Vérification upstream master/tag/latest release : 0.18.0, commit 8406b72.

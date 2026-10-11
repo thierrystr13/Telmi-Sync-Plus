@@ -21,7 +21,7 @@ function toggle(set, value) {
 export default function VideosHome() {
   const [films, setFilms] = useState([]), [selected, setSelected] = useState([]), [cardSelected, setCardSelected] = useState([]),
     [profile, setProfile] = useState('balanced'), [cards, setCards] = useState([]), [drive, setDrive] = useState(''),
-    [card, setCard] = useState({films: []}), [notice, setNotice] = useState(''), [error, setError] = useState(''),
+    [card, setCard] = useState({films: []}), [notice, setNotice] = useState(''), [error, setError] = useState(''), [cardError, setCardError] = useState(''),
     [busy, setBusy] = useState(false), [progress, setProgress] = useState(null), [url, setUrl] = useState(''),
     [youtube, setYoutube] = useState(null), [authorized, setAuthorized] = useState(false), {addModal, rmModal} = useModal()
   const act = useCallback(async action => {
@@ -33,6 +33,7 @@ export default function VideosHome() {
     const active = detected.some(c => c.drive === drive) ? drive : (detected[0]?.drive || '')
     setDrive(active)
     setCard(active ? await call('card', active) : {films: []}); setCardSelected([])
+    setCardError('')
   }, [drive])
   useEffect(() => {
     call('list').then(setFilms).catch(e => setError(e.message))
@@ -41,11 +42,12 @@ export default function VideosHome() {
     return () => {ipcRenderer.removeListener('videos-library', changed); ipcRenderer.removeListener('videos-progress', processing)}
   }, [])
   useEffect(() => {
-    refresh().catch(e => setError(e.message))
+    refresh().catch(e => setCardError(e.message))
     const timer = setInterval(() => call('cards').then(detected => {
       setCards(detected)
+      setCardError('')
       if (drive && !detected.some(c => c.drive === drive)) {setDrive(''); setCard({films: []}); setCardSelected([])}
-    }).catch(e => setError(e.message)), 8000)
+    }).catch(e => setCardError(e.message)), 8000)
     return () => clearInterval(timer)
   }, [drive, refresh])
   const imported = values => {
@@ -83,6 +85,7 @@ export default function VideosHome() {
         <p>Glissez vos films ici : la préparation démarre automatiquement. Originaux conservés. Les tailles estimées ne sont pas garanties.</p>
         {notice && <p role="status" className={styles.notice}>{notice}</p>}
         {error && <p role="alert" className={styles.error}>{error}</p>}
+        {cardError && <p role="alert" className={styles.error}>Carte SD : {cardError}</p>}
         {progress && <label>{progress.kind === 'transfer' ? 'Transfert sur la carte' : progress.kind === 'analyze' ? 'Analyse YouTube' : 'Téléchargement'}<progress max="1" value={progress.value}/></label>}
         <div className={styles.panels}>
           <section className={styles.panel}>

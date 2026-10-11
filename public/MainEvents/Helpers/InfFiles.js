@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { versionStringToObject } from './Version.js'
 
 const
   parseInfFile = (str) => {
@@ -19,36 +18,28 @@ const
   },
 
   parseTelmiOSAutorun = (drive) => {
-    const pathAutorun = path.join(drive, 'autorun.inf')
-
-    if (!fs.existsSync(pathAutorun)) {
-      return null
+    // Development cards may have no autorun or a renamed label. Require the
+    // installed runtime and executable for this fallback, never a video folder alone.
+    const regular = (name, directory = false) => {
+      try {const stat = fs.lstatSync(path.join(drive, name)); return directory ? stat.isDirectory() : stat.isFile()} catch {return false}
     }
-
-    const autorun = parseInfFile(fs.readFileSync(pathAutorun).toString('utf8'))
-
-    if (autorun.label === undefined) {
-      return null
+    const read = name => {
+      try {
+        if (!regular(name) || fs.statSync(path.join(drive, name)).size > 65536) return ''
+        return fs.readFileSync(path.join(drive, name), 'utf8').replace(/^\uFEFF/, '')
+      } catch {return ''}
     }
-
-    const
-      label = autorun.label,
-      telmi = 'TelmiOS',
-      v = '-v'
-
-    if (label.substring(0, telmi.length) === telmi) {
-
-      const version = versionStringToObject(label.substring(label.lastIndexOf(v) + v.length))
-
-      if(version !== null && version.major >= 1) {
-        return {
-          label: telmi,
-          version
-        }
-      }
-    }
-
-    return null
+    const label = parseInfFile(read('autorun.inf')).label || ''
+    const branded = /^(?:TelmiOS|TELMI\+|TELMIPLUS)(?:\s|[-_]|$)/i.test(label)
+    const installed = regular('.tmp_update/runtime.sh') && regular('.tmp_update/bin/storyTeller')
+    if (!branded && !installed) return null
+    const plus = regular('TELMI_PLUS', true) || /TELMI\+|TELMIPLUS/i.test(label)
+    const installedVersion = read('.tmp_update/telmiVersion/version.txt').trim()
+    const versionText = installedVersion || label
+    const match = versionText.match(/(?:^|[-_\s])v?(\d+)\.(\d+)\.(\d+)(?=$|[-+_\s])/i)
+    const version = match ? {major: Number(match[1]), minor: Number(match[2]), fix: Number(match[3])} : {major: 0, minor: 0, fix: 0}
+    if (!installed && version.major < 1) return null
+    return {label: plus ? 'TELMI+' : 'TelmiOS', version, versionText: installedVersion || label || 'Version inconnue', isPlus: plus}
   }
 
 export { parseInfFile, parseTelmiOSAutorun }

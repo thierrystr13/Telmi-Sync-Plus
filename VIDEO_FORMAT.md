@@ -61,7 +61,10 @@ une suppression explicite de la copie SD.
 
 ## Écriture et suppression
 
-Détection : autorun TelmiOS officiel et dossier TELMI_PLUS. Les lecteurs sont
+Détection : autorun TELMI/TelmiOS, ou runtime et exécutable storyTeller installés,
+avec marqueur TELMI_PLUS (ou label TELMI+). Les versions DEV sont acceptées.
+La version système provient de .tmp_update/telmiVersion/version.txt si présent.
+Les lecteurs sont
 revérifiés avant écriture. Refus des symlinks/junctions et collisions étrangères.
 Avant copie : hash de la source préparée, FAT32, nombre de films, espace libre
 avec réserve 16 Mio. Chaque film est copié dans `.syncplus-<uuid>/`, vérifié par
