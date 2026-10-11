@@ -69,7 +69,7 @@ test('audio batch queue, duplicate prevention, tags, cover, persistence and succ
  const queue=new AudioImports(tools,state,()=>local,()=>{},{download:async(job,work)=>fs.copyFile(audio,path.join(work,'source.wav'))})
  const entries=['abcdefghijk','bcdefghijkl'].map((id,i)=>({url:'https://youtu.be/'+id,title:'Track '+i,artist:'Artist '+i,album:'Album '+i,track:i+1,cover}))
  await assert.rejects(queue.enqueue(entries,192,false));await queue.enqueue(entries,192,true);await queue.enqueue(entries,192,true);await queue.idle();assert.equal(queue.jobs.length,2)
- for(const j of queue.jobs){assert.equal(j.status,'ready');assert.equal((await audioProbe(tools,j.file)).tags.artist,j.artist);await assert.rejects(fs.access(path.join(local.downloads,'audio-'+j.id)))}
+ for(const j of queue.jobs){assert.equal(j.status,'ready',j.error);assert.equal((await audioProbe(tools,j.file)).tags.artist,j.artist);await assert.rejects(fs.access(path.join(local.downloads,'audio-'+j.id)))}
  const restored=new AudioImports(tools,state,()=>local);await restored.ready;assert.equal(restored.jobs.filter(j=>j.status==='ready').length,2)
 })
 test('failed/cancelled audio conversion can retry without duplicate job or deleting source',async()=>{

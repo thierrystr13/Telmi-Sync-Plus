@@ -75,7 +75,7 @@ export async function convert(tools, source, output, name, info, options = {}) {
   return {...produced, conversionMode:plan.mode, sizeChangePercent:Math.round((produced.originalBytes/info.originalBytes-1)*1000)/10, sha256: await hash(output, options.signal)}
 }
 export async function image(tools, source, output, width, height, {video = false, duration = 0, ...options} = {}) {
-  await run(tools.ffmpeg, ['-hide_banner', '-nostdin', '-y', '-protocol_whitelist', 'file,pipe', ...(video ? ['-ss', String(Math.min(30, duration / 3))] : []), '-i', source,
-    '-frames:v', '1', '-vf', `scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2,setsar=1`, '-update', '1', output], {...options, timeout: 60000})
+  await run(tools.ffmpeg, ['-hide_banner', '-nostdin', '-y', '-filter_threads', '1', '-protocol_whitelist', 'file,pipe', ...(video ? ['-ss', String(Math.min(30, duration / 3))] : []), '-i', source,
+    '-frames:v', '1', '-vf', `scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2,setsar=1`, '-threads:v', '1', '-update', '1', output], {...options, timeout: 60000})
   if ((await fs.stat(output)).size > 2 * 1024 * 1024) throw new Error('Pochette trop volumineuse.')
 }

@@ -120,3 +120,22 @@
 - Contrôle visuel Windows indisponible : initialisation Computer Use échoue
   deux fois « failed to write kernel assets » / chemin introuvable. Aucun
   test visuel natif annoncé. Les opérations CLI restent accessibles.
+
+
+### Corrections des contrôles Windows
+
+- CI 38170288343 : un échec audio intermittent (48/49) non reproduit localement ;
+  le run PR du même commit passe 49/49. Messages d'erreur de piste ajoutés aux
+  assertions. Filtres et encodage des images bornés à un thread pour éviter
+  des pools de traitement disproportionnés sur les machines de CI.
+- CI PR 38170292007 : tests et compilations réussis, upgrade passé jusqu'au
+  contrôle du désinstalleur, qui révèle un vrai changement de chemin NSIS.
+  Le mode oneClick utilisait package.name au lieu de productName. Ajout d'un
+  include NSIS fixant APP_FILENAME à TELMI Sync Plus, identique aux versions
+  déjà installées. Nouvelle compilation nécessaire avant installation.
+- PC : 5 235 552 256 octets libres sur C:, session non administrateur. La
+  bibliothèque .telmi représente 43 583 991 583 octets / 20 506 fichiers.
+  Copie intégrale impossible sur C:. Maintenance sauvegarde réglages et
+  données Roaming avec empreintes, conserve/inventorie les bibliothèques sur
+  place. Ne prétend pas en avoir réalisé une copie intégrale. Installation
+  Program Files conservée tant que l'élévation Windows reste indisponible.

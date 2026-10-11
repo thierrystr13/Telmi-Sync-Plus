@@ -61,10 +61,15 @@ Le désinstalleur conserve les données utilisateur.
 `scripts/windows-maintenance.ps1` est en mode inventaire par défaut. Le mode
 CleanInstall exige un installateur déjà présent avec SHA-256 correct et un
 dossier de sauvegarde explicite. Il arrête uniquement les applications TELMI
-des trois chemins connus, sauvegarde `.telmi` et les trois dossiers utilisateur
-connus, compare les empreintes, utilise leurs désinstalleurs, retire leurs
+des trois chemins connus, sauvegarde les réglages/catalogues `.telmi` et les trois dossiers utilisateur
+connus, compare les empreintes, inventorie les bibliothèques personnelles
+conservées sur place, utilise leurs désinstalleurs, retire leurs
 raccourcis/entrées devenus obsolètes, installe et exige une seule entrée finale.
-Les bibliothèques personnalisées ne sont pas effacées. Un résultat déjà vérifié
+Les bibliothèques personnalisées ne sont pas effacées. Une copie complète de
+`.telmi` est facultative avec FullLibraryBackup et exige assez d’espace. Sans
+droits administrateur, le script laisse l’ancienne installation machine intacte
+et indique pending-administrator ; il peut installer la version utilisateur.
+Un résultat déjà vérifié
 avec les mêmes paramètres ne relance pas le nettoyage.
 
 CI : médias synthétiques, compilation Windows, vérification PE x64 et outils,

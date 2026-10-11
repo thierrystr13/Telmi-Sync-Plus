@@ -62,7 +62,7 @@
       "target": ["nsis"],
       "artifactName": "TELMI-Sync-Plus-Windows-x64.exe"
     },
-    "nsis": {"oneClick": true, "allowToChangeInstallationDirectory": false, "allowElevation": false, "perMachine": false, "deleteAppDataOnUninstall": false},
+    "nsis": {"oneClick": true, "allowToChangeInstallationDirectory": false, "allowElevation": false, "perMachine": false, "deleteAppDataOnUninstall": false, "include": "electron/build/installer.nsh"},
     "files": ["build/**/*", "public/**/*", "package.json", "LICENSE", "NOTICE.md", "VIDEO_FORMAT.md"],
     "mac": {
       "extendInfo": {

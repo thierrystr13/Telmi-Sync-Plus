@@ -20,7 +20,7 @@ $taskOld=Install-Test $Previous '0.19.0-dev.2'
 $taskNew=Install-Test $Installer '0.20.0'
 if($taskOld.InstallLocation -ne $taskNew.InstallLocation){throw 'Chemin modifié pendant la mise à jour'}
 $taskUninstall=[regex]::Match($taskNew.UninstallString,'^"([^"]+)"').Groups[1].Value
-if((Split-Path $taskUninstall) -ne (Join-Path $env:LOCALAPPDATA 'Programs\TELMI Sync Plus')){throw 'Désinstalleur inattendu'}
+if((Split-Path $taskUninstall) -ne (Join-Path $env:LOCALAPPDATA 'Programs\TELMI Sync Plus')){throw ('Désinstalleur inattendu : '+$taskUninstall)}
 $taskProcess=Start-Process -FilePath $taskUninstall -ArgumentList @('/S','/currentuser') -PassThru -Wait -WindowStyle Hidden
 for($taskAttempt=0;$taskAttempt -lt 30 -and (Test-Path -LiteralPath $taskKey);$taskAttempt++){Start-Sleep -Seconds 1}
 if(Test-Path -LiteralPath $taskKey){throw 'Désinstallation incomplète'}
