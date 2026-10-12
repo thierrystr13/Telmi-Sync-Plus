@@ -72,7 +72,7 @@ jobs:
           $taskVersion=(Get-Content package.json|ConvertFrom-Json).version
           $taskTag='v'+$taskVersion+'-test-'+$env:GITHUB_SHA.Substring(0,7)
           $taskNotes="Version de test non signée. Médias synthétiques et tests d'installation/mise à jour validés par ce workflow. Lecture physique sur Miyoo et NAS Synology non validés. Code source : https://github.com/$env:GITHUB_REPOSITORY/tree/$env:GITHUB_SHA ; licences et liens des sources tierces dans NOTICE.md."
-          gh release create $taskTag electron/dist/TELMI-Sync-Plus-Windows-x64.exe electron/dist/INSTALLATION_TEST.json electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256 --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --prerelease --title 'TELMI Sync Plus 0.20.0 — test multimédia' --notes $taskNotes
+          gh release create $taskTag electron/dist/TELMI-Sync-Plus-Windows-x64.exe electron/dist/INSTALLATION_TEST.json electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256 --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --prerelease --title "TELMI Sync Plus $taskVersion — musique et histoires" --notes $taskNotes
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

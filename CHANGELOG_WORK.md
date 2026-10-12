@@ -15,8 +15,16 @@
   avec index hors ligne ; aucune suppression/migration des anciens imports.
 - 60 tests locaux réussis ; build React réussi. Nouveau test Electron de rendu
   réel réussi localement (1280 et 1000 pixels, 30 pistes, album et 12 épisodes).
-  Captures CI, outils empaquetés et upgrade 0.20.0 → 0.20.1 à vérifier.
-- Installation directe demandée, après résultat CI vérifié.
+  Captures CI, outils empaquetés et upgrade 0.20.0 → 0.20.1 réussis.
+- CI push 38281121445 et PR 38281130094 réussies, commit e2af165.
+- Release v0.20.1-test-e2af165, EXE 300598298 octets, empreinte SHA-256
+  9355b408944f58bb813078072ec0f74d978e2cefb1c92f44d6509d90bc037339.
+- Titre de release corrigé ; futurs titres fondés sur package.version.
+- Installation directe réussie sur le PC : ProductVersion 0.20.1.0, HKCU
+  0.20.1. Sauvegarde de 238 fichiers, SHA-256 vérifiés ; 20494 fichiers
+  personnels inchangés (taille/date). Carte SD laissée intacte.
+- Compte rendu local sous cache/telmi-sync-before-update-0.20.1-20261012-190138
+  du dépôt parent. Aucune fusion et aucune modification du projet TELMI+.
 
 
 ## 2026-10-11 — correctif DEV2 : détection Windows / TELMI+ DEV11

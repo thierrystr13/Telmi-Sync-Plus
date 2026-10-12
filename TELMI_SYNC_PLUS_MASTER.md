@@ -1,6 +1,19 @@
 # TELMI Sync+ — reprise du développement
 
-## Correctif en cours : 0.20.1 — 2026-10-12
+## Livraison Windows vérifiée : 0.20.1 — 2026-10-12
+
+Commit applicatif : e2af165becf92b42f5d1aaab551513fb76f57a30.
+CI push réussie : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38281121445.
+CI PR réussie : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38281130094.
+Release : https://github.com/thierrystr13/Telmi-Sync-Plus/releases/tag/v0.20.1-test-e2af165.
+EXE : 300 598 298 octets ; SHA-256
+9355b408944f58bb813078072ec0f74d978e2cefb1c92f44d6509d90bc037339.
+60 tests réussis, build Windows x64, outils empaquetés, modèle storyFolders
+présent dans app.asar, rendu Electron réel avec fixtures, installation propre
+et mise à jour 0.20.0 → 0.20.1 préservant les réglages. Captures et rapport
+RENDERER_TEST.json dans l'artifact multimedia-renderer-verification du run.
+Le test d'upgrade utilise le code actuel avec métadonnées de version 0.20.0.
+La fixture ne prétend pas reproduire toutes les données du PC réel.
 
 Demande utilisateur : classement RSS par histoire et épisodes, écran MP3
 lisible, onglet YouTube Music séparé, pochettes et passage direct à Musique.
@@ -8,24 +21,41 @@ Implémentation : routes YouTubeMusic/StoryLibrary, thème partagé sombre,
 éditeur d'album inline, bouton MP3 sticky, Router params tab=music et Tabs
 initialTab. LocalMusicProvider et le signal existant local-musics-data reçoivent
 les MP3 terminés ; aucun nouveau stockage ni déplacement personnel.
-storyFolders.js partagé entre React et backend (inclus dans app.asar) :
-regroupement explicitement numéroté ou collection nommée, séparation des sources,
-tri saison/épisode, sélection entière ; mode IPC story-import='by-story'.
-ExportCollection utilise le vrai titre et écrit episodes.json ; exportByStory
-publie des packs séparés et rapporte les échecs par dossier. Anciens packs gardés.
+storyFolders.js partagé entre React et backend, regroupement explicitement
+numéroté ou collection nommée, sources séparées, tri saison/épisode, sélection
+entière ; mode IPC story-import='by-story'. ExportCollection utilise le vrai
+titre et écrit episodes.json ; exportByStory publie des packs séparés et
+rapporte les échecs par dossier. Anciens packs conservés. Catalogue réel
+vérifié en lecture seule : 3312 épisodes, 2715 dossiers, 138 multiparties,
+aucun groupe mélangeant plusieurs sources.
 
-60 tests locaux réussis, build React réussi (trois avertissements upstream).
 scripts/test-renderer.cjs charge le build réel dans une fenêtre Electron cachée,
 avec test/fixtures/media-preview.cjs et profil .tools isolé, sans données réelles.
-Il vérifie couleurs, position du bouton MP3 avec 30 pistes, modification d'album
-et pochette, passage au sous-onglet musique, ordre numérique des épisodes.
-Test de rendu Electron réussi localement : bouton visible avec 30 pistes à
-1280 et 1000 pixels, album présent dans Musique, épisodes 1 à 12 ordonnés.
-Captures sous .tools/renderer-qa, données de démonstration exclusivement.
-CI et installation réelle 0.20.1 restent à vérifier avant de déclarer livraison.
-L'utilisateur demande explicitement l'installation directe après validation.
+Test local et CI : bouton visible avec 30 pistes à 1280 et 1000 pixels,
+champs sombres lisibles, pochette appliquée, album présent dans Musique,
+épisodes 1 à 12 dans l'ordre. La capture native de l'application personnelle
+n'est pas revendiquée : l'accès Sky avait expiré, l'IAB ne joignait pas localhost.
+La vérification visuelle utilise le rendu réel isolé avec données synthétiques.
 
-## Dernière livraison vérifiée : 0.20.0
+Le titre de la release a été corrigé en 0.20.1 via GitHub, sans changer les
+assets ni le tag. Le titre des futures releases utilise package.version ;
+syntaxe PowerShell vérifiée. Ce changement de titre et les comptes rendus
+ne modifient pas le code applicatif de l'installateur testé ci-dessus.
+
+## Installation réelle de 0.20.1
+
+Mise à jour directe 0.20.0 → 0.20.1 terminée sur le PC utilisateur.
+EXE ProductVersion 0.20.1.0 et entrée HKCU DisplayVersion 0.20.1 vérifiés.
+Chemin stable : %LOCALAPPDATA%/Programs/TELMI Sync Plus/TELMI Sync Plus.exe.
+Sauvegarde complète des paramètres et userData : 238 fichiers, environ 1193 Mio,
+empreintes SHA-256 identiques avant/après mise à jour. Les 20494 fichiers
+personnels histoires/musiques conservent leurs tailles et dates de modification.
+Aucune modification de la carte SD dans cette session. Rapport local
+cache/telmi-sync-before-update-0.20.1-20261012-190138/result.json, dans le dépôt
+parent, ignoré par Git. L'ancienne copie machine dev.1 décrite plus bas n'a pas
+été désinstallée ; aucune nouvelle demande de nettoyage administrateur.
+
+## Livraison précédente vérifiée : 0.20.0
 
 Commit applicatif : 610f9de066c93ac7752555557a9463d2d06f2316.
 CI complète réussie : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38171996644.
