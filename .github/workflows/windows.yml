@@ -1,0 +1,87 @@
+name: Windows x64
+on:
+  push:
+    branches: [master, dev/films-videos]
+    paths-ignore: ['**/*.md', 'FEED_AUDIT.json', 'scripts/audit-feeds.py']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: yarn
+      - name: Install official lockfile dependencies
+        run: |
+          npm install --global yarn@1.22.22
+          yarn install --frozen-lockfile --ignore-scripts
+          node node_modules/electron/install.js
+      - name: Download and verify bundled media tools
+        shell: pwsh
+        run: ./scripts/download-tools.ps1
+      - name: Synthetic media and SD compatibility tests
+        run: yarn test:videos
+      - name: Build Windows x64 installer
+        env:
+          # Upstream CRA contains three existing exhaustive-deps warnings.
+          # ESLint errors still fail; do not alter Studio hooks for video work.
+          CI: 'false'
+        run: yarn build:win
+      - name: Verify Windows binary and bundled dependencies
+        run: yarn verify:windows
+      - name: Verify actual Electron renderer with synthetic multimedia
+        run: node_modules/.bin/electron scripts/test-renderer.cjs
+      - name: Build previous-version upgrade fixture
+        run: node scripts/build-windows.js --fixture
+      - name: Test clean installation and update preserving settings
+        shell: pwsh
+        run: ./scripts/test-windows-install.ps1
+      - name: Installer SHA-256
+        shell: pwsh
+        run: |
+          (Get-FileHash electron/dist/TELMI-Sync-Plus-Windows-x64.exe -Algorithm SHA256).Hash | Set-Content electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256 -Encoding ascii
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TELMI-Sync-Plus-Windows-x64
+          path: |
+            electron/dist/TELMI-Sync-Plus-Windows-x64.exe
+            electron/dist/INSTALLATION_TEST.json
+            electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish verified test installer
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev/films-videos'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $taskVersion=(Get-Content package.json|ConvertFrom-Json).version
+          $taskTag='v'+$taskVersion+'-test-'+$env:GITHUB_SHA.Substring(0,7)
+          $taskNotes="Version de test non signée. Médias synthétiques et tests d'installation/mise à jour validés par ce workflow. Lecture physique sur Miyoo et NAS Synology non validés. Code source : https://github.com/$env:GITHUB_REPOSITORY/tree/$env:GITHUB_SHA ; licences et liens des sources tierces dans NOTICE.md."
+          gh release create $taskTag electron/dist/TELMI-Sync-Plus-Windows-x64.exe electron/dist/INSTALLATION_TEST.json electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256 --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --prerelease --title "TELMI Sync Plus $taskVersion — musique et histoires" --notes $taskNotes
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-diagnostics
+          path: electron/dist/builder-debug.yml
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: multimedia-renderer-verification
+          path: .tools/renderer-qa/
+          if-no-files-found: ignore

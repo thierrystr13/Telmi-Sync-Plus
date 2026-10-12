@@ -1,0 +1,75 @@
+@use "src/App/variables" as *;
+.page {color:#f5eefb; display:flex; flex-direction:column; flex:1; min-height:0; gap:18px; overflow:auto; padding:4px 4px 20px; color-scheme:dark;
+  h1 {font-size:26px; line-height:1.2; color:#fff;} h2 {font-size:19px; color:#fff;} h3 {font-size:16px; color:#fff;}
+  p {font-size:14px; line-height:1.5;} small {font-size:12px; color:#c5b8d3;}
+  input:not([type=checkbox]), select, textarea {width:100%; min-width:0; background:#241133; color:#fff; border:1px solid #806895; border-radius:8px; padding:10px 12px; -webkit-user-select:text; user-select:text; font-size:14px;}
+  input::placeholder, textarea::placeholder {color:#c3b0d0; opacity:1;}
+  input:not([type=checkbox]):focus, textarea:focus, select:focus {border:1px solid $orange; outline:2px solid #ffa90044;}
+  option {color:#fff; background:#241133;}
+  input[type=checkbox] {appearance:auto; -webkit-appearance:checkbox; accent-color:$orange; width:18px; height:18px; flex-shrink:0; cursor:pointer;}
+  button {display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:38px; background:#523168; color:#fff; border:1px solid #88649e; border-radius:8px; padding:9px 12px; font-size:14px; font-weight:600;}
+  button:hover:not(:disabled) {background:#6a3b83; border-color:#c49cdd;}
+  button:focus-visible {outline:2px solid $orange; outline-offset:2px;}
+  button:disabled {opacity:.5; cursor:default;}
+  button.primary {background:$orange; border-color:$orange; color:#251135; font-weight:800;}
+  button.primary:hover:not(:disabled) {background:#ffc24c;}
+  label {display:flex; flex-direction:column; gap:6px; font-size:13px; color:#e5d8ee;}
+  progress {width:100%; accent-color:$orange; height:12px;}
+}
+.heading {display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;}
+.muted {color:#c5b8d3;}
+.panel {background:#301747; border:1px solid #644375; border-radius:14px; padding:18px; min-width:0;}
+.toolbar {display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+.toolbar > label {flex:1; min-width:130px;}
+.toolbar > .url {flex:1 1 340px;}
+.steps {display:flex; gap:24px; flex-wrap:wrap; color:#dacbe5; font-size:13px;}
+.steps strong {color:$orange; margin-right:6px;}
+.musicLayout {display:grid; grid-template-columns:minmax(420px,1fr) 330px; align-items:start; gap:18px;}
+.trackList {display:flex; flex-direction:column; gap:8px; margin-top:14px;}
+.track {display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; border:1px solid #644375; background:#251134;}
+.track.active {border-color:$orange; background:#432454;}
+.trackMain {flex:1; min-width:0; text-align:left;}
+.page button.trackOpen {display:flex; flex-direction:column; align-items:flex-start; padding:0; min-height:0; border:0; background:none; flex:1; min-width:0;}
+.trackOpen span {white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;}
+.trackNumber {width:28px; color:#cbb8d9; font-size:13px;}
+.coverSmall {width:48px; height:48px; object-fit:cover; border-radius:6px; background:#573268; flex-shrink:0;}
+.coverPlaceholder {display:flex; align-items:center; justify-content:center; color:#edcaff; font-size:24px;}
+.coverLarge {display:block; width:160px; height:160px; object-fit:cover; border-radius:10px; background:#573268; margin:12px auto;}
+.coverLarge.coverPlaceholder {display:flex; font-size:52px;}
+.editor {position:sticky; top:0; display:flex; flex-direction:column; gap:12px; max-height:calc(100vh - 280px); overflow-y:auto; scroll-padding-block:12px;}
+.fields {display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.full {grid-column:1/-1;}
+.matches {max-height:260px; overflow:auto; display:flex; flex-direction:column; gap:8px;}
+.matches button {flex-direction:column; align-items:flex-start; text-align:left;}
+.actionBar {position:sticky; bottom:0; background:#321849; border:1px solid #9060a9; box-shadow:0 -5px 24px #18062588; padding:14px 18px; border-radius:12px; display:flex; flex-wrap:wrap; align-items:center; gap:12px; z-index:5;}
+.page .check {display:flex; flex-direction:row; align-items:center; gap:8px; line-height:1.4;}
+.actionBar > .check {flex:1 1 320px;}
+.notice {color:#b7f6d9; background:#12372f; border:1px solid #376e5b; border-radius:8px; padding:10px 14px;}
+.error {color:#ffdbd6; background:#4e2537; border:1px solid #bb6673; border-radius:8px; padding:10px 14px; white-space:pre-wrap;}
+.queue {display:flex; flex-direction:column; gap:10px; margin-top:12px; max-height:340px; overflow:auto;}
+.queueItem {display:grid; grid-template-columns:1fr auto; gap:5px 14px; border-bottom:1px solid #644375; padding:10px 0;}
+.queueItem progress,.queueItem .error {grid-column:1/-1;}
+.badge {display:inline-flex; align-items:center; gap:4px; font-size:12px; border-radius:20px; background:#523269; color:#eee0f8; padding:4px 8px;}
+.badges {display:flex; flex-wrap:wrap; gap:6px; margin:8px 0;}
+.libraryLayout {display:grid; grid-template-columns:230px minmax(0,1fr); gap:18px; align-items:start;}
+.sidebar {display:flex; flex-direction:column; gap:8px; position:sticky; top:0; max-height:calc(100vh - 280px); overflow-y:auto;}
+.page .folderNav {justify-content:space-between; text-align:left; width:100%;}
+.page .folderNav.selected {border-color:$orange; background:#59316d;}
+.sidebar h3 {margin-top:12px;}
+.folderGrid {display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px;}
+.folderCard {position:relative; background:#301747; border:1px solid #745184; border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:10px;}
+.folderTop {display:flex; align-items:flex-start; gap:12px;}
+.folderImage {width:72px; height:72px; object-fit:cover; border-radius:10px; background:#573268; flex-shrink:0;}
+.folderCard h3 {font-size:17px; line-height:1.4;}
+.folderCard .toolbar {margin-top:auto;}
+.folderCard .description {color:#d0bfdc; font-size:13px;}
+.breadcrumb {display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;}
+.season {display:flex; gap:12px; align-items:center; background:#4a285d; border-radius:8px; padding:12px; margin-top:12px;}
+.episodeRow {display:grid; grid-template-columns:24px minmax(0,1fr) auto; gap:12px; align-items:start; border-bottom:1px solid #644375; padding:14px 0;}
+.episodeRow p {color:#d0bfdc; margin:7px 0;}
+.episodeRow .toolbar {justify-content:flex-end;}
+.sources {display:flex; flex-direction:column; gap:10px;}
+.empty {padding:28px; text-align:center; color:#d0bfdc; background:#301747; border:1px dashed #896599; border-radius:12px;}
+.filterBar {display:grid; grid-template-columns:minmax(220px,2fr) repeat(3,minmax(120px,1fr)); gap:10px;}
+@media(max-width:1120px) {.musicLayout {grid-template-columns:minmax(360px,1fr) 300px;} .libraryLayout {grid-template-columns:190px minmax(0,1fr);} .filterBar {grid-template-columns:1fr 1fr;}}
+@media(max-width:850px) {.musicLayout,.libraryLayout {grid-template-columns:1fr;} .editor,.sidebar {position:static;max-height:none;overflow:visible;} .sidebar {display:grid;grid-template-columns:1fr 1fr;} .sidebar h3 {grid-column:1/-1;} .episodeRow {grid-template-columns:24px minmax(0,1fr);} .episodeRow > .toolbar {grid-column:2;} .steps {gap:10px;} }

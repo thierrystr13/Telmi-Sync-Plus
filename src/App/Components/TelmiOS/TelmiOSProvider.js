@@ -1,8 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useElectronEmitter, useElectronListener } from '../Electron/Hooks/UseElectronEvent.js'
 import TelmiOSContext from './TelmiOSContext.js'
-import { useModal } from '../Modal/ModalHooks.js'
-import ModalElectronTaskVisualizer from '../Electron/Modal/ModalElectronTaskVisualizer.js'
 
 const telmiOSToString = (telmiOS) => {
   return telmiOS === null ?
@@ -16,7 +14,6 @@ function TelmiOSProvider ({children}) {
     [diskusage, setDiskusage] = useState(null),
     [stories, setStories] = useState([]),
     [music, setMusic] = useState([]),
-    {addModal, rmModal} = useModal(),
     data = useMemo(() => ({...telmiOS, diskusage, stories, music}), [telmiOS, diskusage, stories, music])
 
   useElectronListener(
@@ -37,20 +34,8 @@ function TelmiOSProvider ({children}) {
   useElectronListener('telmios-diskusage-data', (du) => setDiskusage(du), [setDiskusage])
   useElectronEmitter('telmios-diskusage', [telmiOS])
 
-  useEffect(
-    () => {
-      if (telmiOS !== null) {
-        addModal((key) => {
-          const modal = <ModalElectronTaskVisualizer key={key}
-                                                     taskName="telmios-update"
-                                                     dataSent={[telmiOS]}
-                                                     onClose={() => rmModal(modal)}/>
-          return modal
-        })
-      }
-    },
-    [telmiOS, addModal, rmModal]
-  )
+  // Never update the operating system merely by inserting a TELMI+ card.
+  // The existing update flow remains available as an explicit action.
 
   useElectronListener('telmios-stories-data', (telmiOSStories) => setStories(telmiOSStories), [setStories])
   useElectronEmitter('telmios-stories-get', [telmiOS])

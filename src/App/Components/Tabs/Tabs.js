@@ -3,11 +3,12 @@ import Tab from './Tab.js'
 
 import styles from './Tabs.module.scss'
 
-function Tabs ({className, tabs}) {
+function Tabs ({className, tabs, initialTab=0}) {
   const
-    [currentTab, setTab] = useState(tabs[0] || {}),
+    [currentTab, setTab] = useState(tabs[initialTab] || tabs[0] || {}),
     DisplayedComponent = currentTab.content
 
+  useEffect(()=>{setTab(tabs[initialTab]||tabs[0]||{})},[initialTab,tabs])
   useEffect(
     () => {
       if (tabs.length && tabs.find((t) => t === currentTab) === undefined) {

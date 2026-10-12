@@ -1,5 +1,5 @@
 import {ipcMain} from 'electron'
-import * as drivelist from 'drivelist'
+import * as drivelist from './Helpers/DriveList.js'
 import {parseTelmiOSAutorun} from './Helpers/InfFiles.js'
 import {readTelmiOSParameters, saveTelmiOSParameters} from './Helpers/TelmiOS.js'
 import runProcess from './Processes/RunProcess.js'
@@ -15,17 +15,24 @@ function checkDiskUsage(drive) {
 
 function mainEventTelmiOS(mainWindow) {
   const checkUsbDevices = async () => {
+    try {
     const drives = (await drivelist.list()).reduce((acc, d) => [...acc, ...d.mountpoints.map((p) => p.path)], [])
 
     for (const drive of drives) {
+      try {
       const telmiOS = parseTelmiOSAutorun(drive)
       if (telmiOS !== null) {
         mainWindow.webContents.send('telmios-data', readTelmiOSParameters({drive, telmiOS}))
         return
       }
+      } catch (error) {console.warn('Skipping unavailable drive:', error.message)}
     }
 
     mainWindow.webContents.send('telmios-data', null)
+    } catch (error) {
+      if (!mainWindow.isDestroyed()) mainWindow.webContents.send('telmios-data', null)
+      console.error('Drive detection failed:', error.message)
+    }
   }
 
   setInterval(checkUsbDevices, 5000)
@@ -36,7 +43,7 @@ function mainEventTelmiOS(mainWindow) {
     async (event) => {
       mainWindow.webContents.send(
         'telmios-disklist-data',
-        (await drivelist.list())
+        (await drivelist.list({physical: true}))
           .filter((d) => d.isRemovable && d.partitionTableType !== null)
           .reduce((acc, d) => [...acc, ...d.mountpoints.map((p) => ({name: d.description, drive: p.path, size: d.size}))], [])
       )
@@ -54,6 +61,11 @@ function mainEventTelmiOS(mainWindow) {
     'telmios-update',
     async (event, telmiDevice) => {
       if (telmiDevice === undefined || telmiDevice === null) {
+        return
+      }
+
+      if (parseTelmiOSAutorun(telmiDevice.drive)?.isPlus) {
+        mainWindow.webContents.send('telmios-update-error', 'telmios-update', 'Une carte TELMI+ doit être mise à jour avec une version TELMI+, pour conserver ses modules personnalisés.')
         return
       }
 

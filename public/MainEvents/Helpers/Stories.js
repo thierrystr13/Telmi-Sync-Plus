@@ -59,7 +59,7 @@ const
       !fs.existsSync(nodesPath) || !fs.existsSync(mdPath) || !fs.existsSync(mp3Path) ||
       !fs.existsSync(pngPath) || !fs.existsSync(audiosPath) || !fs.existsSync(imagesPath)
     ) {
-      rmDirectory(storyPath)
+      // Reading a damaged/incomplete personal library must never delete it.
       return null
     }
 
@@ -70,7 +70,7 @@ const
 
       if (storyDirName.toLowerCase() !== directory.toLowerCase()) {
         const newStoryPath = path.join(storiesPath, storyDirName)
-        rmDirectory(newStoryPath)
+        if (fs.existsSync(newStoryPath)) return null
         fs.renameSync(storyPath, newStoryPath)
         directory = storyDirName
       }
@@ -91,7 +91,7 @@ const
     if (!fs.existsSync(storiesPath)) {
       return {stories: [], error:[]}
     }
-    const list = fs.readdirSync(storiesPath)
+    const list = fs.readdirSync(storiesPath).filter(d => !d.startsWith('.'))
       .reduce(
         (acc, d) => {
           const md = readStoryMetadata(storiesPath, d)

@@ -1,0 +1,36 @@
+@use "src/App/variables" as *;
+.container {display:flex; flex-direction:column; gap:10px; padding:16px; min-height:0; flex:1; overflow:auto;
+  h1 {font-size:22px; margin:0 16px 0 0;} p {font-size:13px; margin:4px 0;}
+  button {background:$orange; color:$purple; border:0; border-radius:7px; padding:9px 12px; cursor:pointer; font-weight:bold;}
+  button:disabled {opacity:.45; cursor:default;}
+}
+.toolbar,.cardToolbar {display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.toolbar label,.cardToolbar label,.fields label,.tmdb label {display:flex; flex-direction:column; gap:5px; font-size:13px;}
+.container input,.container select,.editor input,.editor textarea {background:$purple2; color:white; border:1px solid $white30; border-radius:5px; padding:8px;}
+.container input[type=checkbox] {appearance:auto; width:18px; height:18px; padding:0; accent-color:$orange; vertical-align:middle;}
+.panels {display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1; min-height:340px;}
+.panel {display:flex; flex-direction:column; min-width:0; background:$black20; border-radius:12px; padding:12px; min-height:320px;}
+.panel > div:first-child {flex-shrink:0;}
+.panel > div {min-height:0;}
+.queue {max-height:150px; overflow:auto; font-size:13px; padding:8px;}
+.queue > div {margin:6px 0;}
+.container progress {display:block; width:100%; height:14px; accent-color:$orange;}
+.error {color:#ffd1ca; white-space:pre-wrap;}
+.notice {color:#a4ffe7;}
+.youtube {background:$black20; border-radius:10px; padding:12px;}
+.youtube summary,.tmdb summary {cursor:pointer; font-weight:bold; padding:6px 0;}
+.youtubeDetails,.editorBody {display:flex; gap:16px; padding:12px 0;}
+.youtubeDetails > img {width:180px; height:120px; object-fit:contain;}
+.description {max-height:110px; overflow:auto; white-space:pre-wrap;}
+.editor {width:780px; max-height:90vh; overflow:auto;}
+.editor button {background:$orange; color:$purple; border:0; border-radius:6px; padding:9px; margin:6px 0; cursor:pointer;}
+.editor button:disabled {opacity:.45;}
+.poster {width:210px; flex-shrink:0;}
+.poster img {width:200px; height:300px; object-fit:contain; background:$black20;}
+.fields {display:flex; flex-direction:column; flex:1; gap:9px;}
+.tmdb {font-size:13px; padding:12px; background:$black20;}
+.tmdb input {width:100%; box-sizing:border-box;}
+.result {display:flex; gap:12px; align-items:center; margin:10px 0;}
+.result img {width:60px; height:90px; object-fit:cover;}
+.result span {flex:1;}
+@media(max-width:1050px) {.panels {grid-template-columns:1fr;} .editor {width:90vw;}}

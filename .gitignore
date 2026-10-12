@@ -25,3 +25,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Downloaded tools are checksum-pinned and assembled by CI, never committed.
+/extraResources/video-tools/
+/test-output/
+/.tools/

@@ -8,6 +8,7 @@ import ModalTelmiOSParamsForm from './ModalTelmiOSParamsForm.js'
 
 import styles from '../Synchronize.module.scss'
 import ModalTelmiOSEject from './ModalTelmiOSEject.js'
+import ModalElectronTaskVisualizer from '../../../Components/Electron/Modal/ModalElectronTaskVisualizer.js'
 
 const
   {ipcRenderer} = window.require('electron'),
@@ -61,6 +62,10 @@ function TelmiOSDetected ({telmiOS, onTransfer, children}) {
           }
         </span>
         <span className={styles.telmiOSTitleIcons}>
+            {!telmiOS.telmiOS.isPlus && <button title="Mettre à jour Telmi OS (action explicite)" onClick={() => addModal(key => {
+              const modal = <ModalElectronTaskVisualizer key={key} taskName="telmios-update" dataSent={[telmiOS]} onClose={() => rmModal(modal)}/>
+              return modal
+            })}>Mise à jour OS</button>}
             <ButtonIconGear className={styles.telmiOSTitleIcon}
                             title={getLocale('telmios-parameters')}
                             onClick={onTelmiOSParams}/>

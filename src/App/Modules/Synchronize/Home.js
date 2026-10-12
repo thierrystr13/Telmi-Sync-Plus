@@ -18,13 +18,13 @@ const tabs = [
   {tab: MusicTab, content: MusicContent},
 ]
 
-function SynchronizeHome () {
+function SynchronizeHome ({tab='stories'}) {
   const {getLocale} = useLocale()
   return <Import>
     <TopBar currentModule="Synchronize"/>
     <AppContainer>
       <p className={styles.tooltip}>{getLocale('drag-drop-medias')}</p>
-      <Tabs className={styles.tabs} tabs={tabs}/>
+      <Tabs className={styles.tabs} tabs={tabs} initialTab={tab==='music'?1:0}/>
     </AppContainer>
   </Import>
 }

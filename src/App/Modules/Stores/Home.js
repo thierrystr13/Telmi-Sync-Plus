@@ -9,6 +9,8 @@ import StoreContent from './Store/StoreContent.js'
 
 import styles from './Stores.module.scss'
 import StoreAudioBuilderProvider from './Store/AudioList/Provider/StoreAudioBuilderProvider.js'
+import StoryLibrary from '../Multimedia/StoryLibrary.js'
+const storyTab={tab:props=><button {...props}>Littérature audio</button>,content:StoryLibrary}
 
 const plusTab = {tab: TabPlus, content: null}
 
@@ -26,6 +28,7 @@ function StoresHome() {
           content: () => <StoreContent store={store}/>
         })
       ),
+      storyTab,
       plusTab
     ]),
     [setTabs]

@@ -1,0 +1,53 @@
+// Isolated application test: synthetic IPC and media only, never personal data.
+const {app,BrowserWindow}=require('electron')
+const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict')
+app.setPath('userData',path.resolve('.tools/renderer-test-profile'))
+async function waitFor(win,expression){
+ for(let i=0;i<100;i++){if(await win.webContents.executeJavaScript(expression))return;await new Promise(r=>setTimeout(r,50))}
+ await screenshot(win,'failure');await fs.writeFile('.tools/renderer-qa/failure.txt',await win.webContents.executeJavaScript('document.body.innerText'))
+ throw Error('Renderer condition not reached: '+expression)
+}
+async function click(win,text){await win.webContents.executeJavaScript('(()=>{const b=[...document.querySelectorAll("button")].find(b=>b.textContent.includes('+JSON.stringify(text)+'));if(!b)throw Error("Missing button");b.click()})()')}
+const evaluate=(win,fn,...args)=>win.webContents.executeJavaScript('('+fn.toString()+')('+args.map(v=>JSON.stringify(v)).join(',')+')')
+async function screenshot(win,name){await win.webContents.executeJavaScript('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))');await fs.mkdir('.tools/renderer-qa',{recursive:true});await fs.writeFile('.tools/renderer-qa/'+name+'.png',(await win.webContents.capturePage()).toPNG())}
+async function test(){
+ await app.whenReady()
+ const win=new BrowserWindow({show:false,width:1280,height:900,webPreferences:{contextIsolation:false,sandbox:false,backgroundThrottling:false,preload:path.resolve('test/fixtures/media-preview.cjs')}})
+ win.webContents.on('console-message',event=>{if(event.level==='error')console.error(event.message)})
+ await win.loadFile(path.resolve('build/index.html'))
+ await waitFor(win,'!![...document.querySelectorAll("button")].find(b=>b.textContent.includes("YouTube Music"))')
+ await click(win,'YouTube Music');await waitFor(win,'!!document.querySelector("footer")')
+ const fill=(label,value)=>evaluate(win,(label,value)=>{const e=document.querySelector('[aria-label="'+label+'"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(e,value);e.dispatchEvent(new Event('input',{bubbles:true}))},label,value)
+ await fill('URL musicale YouTube','https://youtu.be/abcdefghijk');await click(win,'Analyser')
+ await waitFor(win,'document.querySelectorAll("[class*=trackOpen]").length===30')
+ const screen=await evaluate(win,()=>{const input=document.querySelector('[aria-label="URL musicale YouTube"]'),button=[...document.querySelectorAll('button')].find(b=>b.textContent.includes('Convertir en MP3')),rect=button.getBoundingClientRect(),style=getComputedStyle(input);return{color:style.color,background:style.backgroundColor,button:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},height:innerHeight,width:innerWidth,dialogs:document.querySelectorAll('[role=dialog]').length}})
+ assert.equal(screen.color,'rgb(255, 255, 255)');assert.equal(screen.background,'rgb(36, 17, 51)');assert.equal(screen.dialogs,0)
+ assert.ok(screen.button.y>=0&&screen.button.y+screen.button.height<=screen.height,'MP3 button must remain in viewport with 30 tracks')
+ await click(win,'Choisir une pochette');await waitFor(win,'document.querySelectorAll("img").length>1')
+ await fill('Album de la piste','Mon album de test');await waitFor(win,'document.body.textContent.includes("Mon album de test")');await click(win,'Appliquer l’album')
+ await waitFor(win,'[...document.querySelectorAll("[class*=trackOpen]")].filter(e=>e.textContent.includes("Mon album de test")).length===30')
+ await screenshot(win,'youtube-music')
+ await win.webContents.executeJavaScript('document.querySelector("footer input").click()');await click(win,'Convertir en MP3')
+ await waitFor(win,'document.body.textContent.includes("30 prête(s)")')
+ await click(win,'Voir mes albums');await waitFor(win,'document.body.textContent.includes("Mon album de test")')
+ await screenshot(win,'synchroniser-musique')
+ await click(win,'Livres audio');await waitFor(win,'document.body.textContent.includes("4 dossier(s)")');await screenshot(win,'livres-audio')
+ await evaluate(win,()=>[...document.querySelectorAll('article')].find(e=>e.querySelector('h3')?.textContent==='Le Dragon').querySelector('button').click())
+ await waitFor(win,'document.body.textContent.includes("Épisode 12")')
+ const numbers=await evaluate(win,()=>[...document.querySelectorAll('article')].map(e=>Number(/Épisode (\d+)/.exec(e.querySelector('span').textContent)?.[1])))
+ assert.deepEqual(numbers,Array.from({length:12},(_,i)=>i+1))
+ await win.webContents.executeJavaScript('[...document.querySelectorAll("label")].find(e=>e.textContent.includes("Sélectionner toute cette histoire")).querySelector("input").click()')
+ await waitFor(win,'document.body.textContent.includes("12 épisode(s)")');await screenshot(win,'episodes-ordonnes')
+ // At smaller window size controls remain accessible without lateral overflow.
+ win.setSize(1000,800);await click(win,'YouTube Music');await waitFor(win,'!!document.querySelector("footer")')
+ const bounds=await win.webContents.executeJavaScript('(()=>{const r=[...document.querySelectorAll("button")].find(b=>b.textContent.includes("Convertir en MP3")).getBoundingClientRect();return {right:r.right,bottom:r.bottom,width:innerWidth,height:innerHeight}})()')
+ assert.ok(bounds.right<=bounds.width&&bounds.bottom<=bounds.height);await screenshot(win,'youtube-music-1000px')
+ const editor=await evaluate(win,async()=>{const input=document.querySelector('[aria-label="Genre de la piste"]'),aside=input.closest('aside'),page=aside.closest('[class*=page]');page.scrollTop=aside.offsetTop;aside.scrollTop=aside.scrollHeight;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const r=input.getBoundingClientRect(),footer=document.querySelector('footer').getBoundingClientRect();return{overflow:getComputedStyle(aside).overflowY,top:r.top,bottom:r.bottom,footerTop:footer.top}})
+ assert.equal(editor.overflow,'auto');assert.ok(editor.top>=0&&editor.bottom<=editor.footerTop,'Last album field must be reachable before end of a long playlist: '+JSON.stringify(editor))
+ await click(win,'Livres audio');await waitFor(win,'document.body.textContent.includes("4 dossier(s)")')
+ const sidebar=await evaluate(win,async()=>{const aside=document.querySelector('aside'),page=aside.closest('[class*=page]');page.scrollTop=aside.offsetTop;aside.scrollTop=aside.scrollHeight;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const buttons=aside.querySelectorAll('button'),r=buttons[buttons.length-1].getBoundingClientRect(),footer=document.querySelector('footer').getBoundingClientRect();return{overflow:getComputedStyle(aside).overflowY,top:r.top,bottom:r.bottom,footerTop:footer.top}})
+ assert.equal(sidebar.overflow,'auto');assert.ok(sidebar.top>=0&&sidebar.bottom<=sidebar.footerTop,'Last collection/type button must be reachable independently of story cards: '+JSON.stringify(sidebar))
+ await fs.writeFile('.tools/renderer-qa/RENDERER_TEST.json',JSON.stringify({syntheticFixtures:true,actualProductionReactBuild:true,mp3ButtonVisible:true,darkInputReadable:true,noOverlay:true,musicTabAlbumVisible:true,orderedEpisodes:true,albumFieldsReachable:true,collectionButtonsReachable:true,screen,bounds,editor,sidebar},null,2))
+ win.destroy();console.log('Actual Electron renderer with synthetic media: readable inputs, visible conversion, album synchronization and ordered episodes verified.')
+}
+test().then(()=>app.exit(0)).catch(async error=>{console.error(error);const win=BrowserWindow.getAllWindows()[0];if(win)await screenshot(win,'failure');app.exit(1)})

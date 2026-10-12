@@ -10,11 +10,11 @@ function mainEventUpdate (mainWindow) {
   ipcMain.on(
     'check-update',
     async () => {
-      const json = await requestJson('https://api.github.com/repos/DantSu/Telmi-Sync/releases', {})
+      const json = await requestJson('https://api.github.com/repos/thierrystr13/Telmi-Sync-Plus/releases', {})
       if (!json.length || !isNewerVersion(app.getVersion(), json[0].tag_name)) {
         return
       }
-      mainWindow.webContents.send('check-update-data', 'https://telmi.fr/#download')
+      mainWindow.webContents.send('check-update-data', 'https://github.com/thierrystr13/Telmi-Sync-Plus/releases')
     }
   )
 }

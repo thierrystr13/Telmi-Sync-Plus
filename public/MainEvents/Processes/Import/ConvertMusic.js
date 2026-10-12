@@ -7,6 +7,8 @@ import { parseInfFile } from '../../Helpers/InfFiles.js'
 import { getMusicBrainzCoverImage } from '../Helpers/MusicBrainzApi.js'
 import { convertMusicImage } from './Helpers/ImageFile.js'
 import { musicObjectToName } from '../../Helpers/Music.js'
+import {audioProbe} from '../../Multimedia/audio.js'
+import {run} from '../../Videos/process.js'
 
 function convertMusic (srcPath) {
   process.stdout.write('*music-extracting-metadata*0*3*')
@@ -30,14 +32,21 @@ function convertMusic (srcPath) {
         coverPath = path.join(musicPath, coverFileName),
         musicDstPath = path.join(musicPath, musicFileName),
 
+        finish = () => {
+          const tools = {ffprobe: path.join(getExtraResourcesPath(), 'video-tools', 'ffprobe.exe'), ffmpeg: path.join(getExtraResourcesPath(), 'video-tools', 'ffmpeg.exe')}
+          audioProbe(tools, musicDstPath).then(() => run(tools.ffmpeg, ['-v', 'error', '-xerror', '-i', musicDstPath, '-f', 'null', '-']))
+            .then(() => {fs.rmSync(tmpPath, {recursive: true, force: true}); process.stdout.write('success')})
+            .catch(error => process.stderr.write(error.message))
+        },
+
         stepCopyDefaultCover = () => {
           fs.copyFileSync(path.join(getExtraResourcesPath(), 'assets', 'images', 'unknow-album.png'), coverPath)
-          process.stdout.write('success')
+          finish()
         },
 
         stepCheckCover = () => {
           if (fs.existsSync(coverPath)) {
-            return process.stdout.write('success')
+            return finish()
           }
 
           if (metadata.artist === 'unknow' || metadata.album === 'unknow') {
@@ -51,7 +60,7 @@ function convertMusic (srcPath) {
                   if (!fs.existsSync(coverPath)) {
                     return stepCopyDefaultCover()
                   }
-                  process.stdout.write('success')
+                  finish()
                 })
                 .catch(stepCopyDefaultCover)
             })
@@ -61,7 +70,7 @@ function convertMusic (srcPath) {
       process.stdout.write('*converting-audio*1*3*')
 
       if(fs.existsSync(musicDstPath)) {
-        process.stdout.write('success')
+        finish()
         return
       }
 

@@ -1,16 +1,20 @@
 {
-  "name": "telmi-sync",
-  "description": "Desktop application for synchronize stories and music with Telmi OS.",
-  "version": "0.18.0",
+  "name": "telmi-sync-plus",
+  "description": "TELMI Sync+ : histoires, musique, films et vidÃ©os pour TELMI+.",
+  "version": "0.20.2",
   "author": {
     "name": "Franck ALARY",
     "url": "http://dantsu.com/"
   },
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "homepage": ".",
   "main": "public/electron.js",
   "type": "module",
   "scripts": {
+    "test:videos": "node --test test/*.test.js",
+    "build:web": "react-scripts build",
+    "build:win": "react-scripts build && node scripts/build-windows.js",
+    "verify:windows": "node scripts/verify-windows.js",
     "start": "concurrently \"cross-env BROWSER=none react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "react-scripts build && electron-builder --x64",
     "build:mac": "react-scripts build && electron-builder --mac --x64 && electron-builder --mac --arm64 -c.mac.artifactName='${productName}-${version}-silicon.${ext}'"
@@ -51,8 +55,32 @@
     ]
   },
   "build": {
-    "appId": "com.dantsu.telmisync",
-    "productName": "Telmi Sync",
+    "appId": "fr.telmi.syncplus",
+    "productName": "TELMI Sync Plus",
+    "npmRebuild": false,
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "TELMI-Sync-Plus-Windows-x64.exe"
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "allowElevation": false,
+      "perMachine": false,
+      "deleteAppDataOnUninstall": false,
+      "include": "electron/build/installer.nsh"
+    },
+    "files": [
+      "build/**/*",
+      "public/**/*",
+      "package.json",
+      "LICENSE",
+      "NOTICE.md",
+      "VIDEO_FORMAT.md",
+      "src/App/Modules/Multimedia/storyFolders.js"
+    ],
     "mac": {
       "extendInfo": {
         "NSMicrophoneUsageDescription": "Access to your microphone is needed for record your voice",
@@ -71,7 +99,9 @@
         "from": "./extraResources/",
         "to": "extraResources",
         "filter": [
-          "**/*"
+          "**/*",
+          "!video-tools/ffmpeg.zip",
+          "!video-tools/ffmpeg-distribution/**/*"
         ]
       }
     ],
