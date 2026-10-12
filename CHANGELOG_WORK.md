@@ -7,10 +7,17 @@
   la fiche d’album et la colonne des collections ; repli en flux normal en
   dessous de 850 pixels. Le bouton MP3 reste accessible.
 - Test Electron complété : dernier champ de la fiche et dernier bouton de
-  collection atteignables sans parcourir toute la liste. CI et installation
-  du complément restent à vérifier. Premier run 38284264391 : compilation
-  réussie, dernier bouton de collection recouvert en CI ; marge verticale
+  collection atteignables sans parcourir toute la liste. Premier run
+  38284264391 : compilation réussie, dernier bouton de collection recouvert en CI ; marge verticale
   augmentée et mesure après deux frames de rendu, sans alléger le contrôle.
+- 60 tests locaux et CI réussis ; build Windows, rendu Electron et tests
+  d’installation propre et upgrade 0.20.1 → 0.20.2 réussis.
+- CI push 38285036858 et PR 38285042621 réussies, commit f0d25f8.
+- Release v0.20.2-test-f0d25f8, EXE 300598288 octets, SHA-256
+  e96141225c2cefce13d513393e0efce9b763d1afba36ba0a3865d30801ce8e80.
+- Mise à jour directe 0.20.1 → 0.20.2 terminée et version vérifiée ;
+  données conservées. Les détails propres au poste restent en local.
+- Documentation de livraison mise à jour ; PR en brouillon, aucune fusion.
 
 
 ## 2026-10-12 — 0.20.1 : bibliothèque par histoire et YouTube Music
@@ -33,20 +40,18 @@
 - Release v0.20.1-test-e2af165, EXE 300598298 octets, empreinte SHA-256
   9355b408944f58bb813078072ec0f74d978e2cefb1c92f44d6509d90bc037339.
 - Titre de release corrigé ; futurs titres fondés sur package.version.
-- Installation directe réussie sur le PC : ProductVersion 0.20.1.0, HKCU
-  0.20.1. Sauvegarde de 238 fichiers, SHA-256 vérifiés ; 20494 fichiers
-  personnels inchangés (taille/date). Carte SD laissée intacte.
-- Compte rendu local sous cache/telmi-sync-before-update-0.20.1-20261012-190138
-  du dépôt parent. Aucune fusion et aucune modification du projet TELMI+.
+- Installation directe réussie et données conservées. Rapport détaillé
+  local non versionné. Aucune fusion ni modification de TELMI+.
+
 
 
 ## 2026-10-11 — correctif DEV2 : détection Windows / TELMI+ DEV11
 
 - Signalement utilisateur : aucune carte et erreur PowerShell dans Films & Vidéos.
-- Lecture seule de la SD E: : autorun TelmiOS-v1.10.4, version système
+- Lecture seule d’une carte DEV11 : autorun TelmiOS-v1.10.4, version système
   v1.10.4-TELMIPLUS-DEV11-RETROGAMING-VISUEL, TELMI_PLUS et paramètres valides.
 - Ancien détecteur reproduit en échec ; même avec 60 s, PowerShell expire sur ce PC.
-  fs.statfs accède correctement à E:. Détection courante désormais native Node,
+  fs.statfs accède correctement à la carte. Détection courante désormais native Node,
   partagée entre modules, cache court et 3 s maximum par lecteur illisible.
   PowerShell n'est utilisé que par le dialogue historique de création/formatage,
   où le type physique amovible reste obligatoire (jamais déduit d'une lettre).
@@ -173,12 +178,6 @@
   Le mode oneClick utilisait package.name au lieu de productName. Ajout d'un
   include NSIS fixant APP_FILENAME à TELMI Sync Plus, identique aux versions
   déjà installées. Nouvelle compilation nécessaire avant installation.
-- PC : 5 235 552 256 octets libres sur C:, session non administrateur. La
-  bibliothèque .telmi représente 43 583 991 583 octets / 20 506 fichiers.
-  Copie intégrale impossible sur C:. Maintenance sauvegarde réglages et
-  données Roaming avec empreintes, conserve/inventorie les bibliothèques sur
-  place. Ne prétend pas en avoir réalisé une copie intégrale. Installation
-  Program Files conservée tant que l'élévation Windows reste indisponible.
 
 ### File persistante et recherche jeunesse
 
@@ -200,26 +199,13 @@
   v0.20.0-test-610f9de publiée avec rapport et SHA-256 ; installateur 300 576 346 octets.
   Empreinte : b46adde247c2decae49a972261eb19eee5256b1ac2ab4680b1259b414c87a002.
 
-### Installation sur le PC réel
+### Vérification de l’installation
 
-- EXE 0.20.0 téléchargé depuis cette release et empreinte SHA-256 comparée
-  au fichier publié et au digest GitHub, avant toute désinstallation.
-- La maintenance s'est bloquée avant désinstallation sur CIM, puis taskkill.
-  Arrêt de ces tentatives ; détection et arrêt directs via Get-Process/Stop-Process
-  limités aux exécutables TELMI des trois dossiers connus. Syntaxe PowerShell validée.
-- Maintenance réelle terminée : 1 832 fichiers de réglages/données sauvegardés
-  avec SHA-256 ; 20 494 fichiers personnels musique/histoires conservés et vérifiés
-  par taille/date. Pas de copie intégrale des 43,6 Go de .telmi sur C: trop petit.
-- Les versions utilisateur Telmi Sync 0.18.0 et Sync Plus 0.19.0-dev.2 sont
-  réellement désinstallées ; Sync Plus 0.20.0 est installé, une entrée utilisateur.
-- Ancienne version machine 0.19.0-dev.1 dans Program Files conservée : le jeton
-  Windows n'a pas les droits administrateur. Deux entrées globales restent donc
-  présentes. Le résultat local porte pending-administrator, pas verified.
-  Manifeste et sauvegarde sous cache/telmi-sync-before-install-20261011-2247,
-  exclus de Git. Aucun secret/configuration personnelle publié.
-- Contrôle de l'installation réelle : exécutable version 0.20.0.0,
-  FFmpeg/FFprobe/yt-dlp présents. Relance de la maintenance avec le même SHA
-  et la même sauvegarde : aucune opération répétée (idempotence vérifiée).
+- Exécutable téléchargé depuis la release et empreinte SHA-256 vérifiée.
+- Données conservées et version installée vérifiée. Les détails du poste et
+  des sauvegardes restent dans le rapport local non versionné.
+- Arrêt des processus TELMI via Get-Process/Stop-Process, limité aux chemins
+  connus ; éviter les appels CIM/taskkill bloquants.
 - Conversion supplémentaire avec les outils du dossier installé, sur média
   synthétique 1280x720 : sortie 640x360, 20 fps, H.264 Constrained Baseline,
   audio AAC, durée 1 s, 133 447 octets, variation -75,4 %. Décodage complet

@@ -1,6 +1,27 @@
 # TELMI Sync+ — reprise du développement
 
-## Livraison Windows vérifiée : 0.20.1 — 2026-10-12
+## Livraison Windows vérifiée : 0.20.2 — 2026-10-12
+
+Complément de la refonte 0.20.1 : défilement indépendant de la fiche d’album
+et de la colonne des collections RSS. Les derniers contrôles restent accessibles
+sans parcourir toute la bibliothèque ; flux normal sous 850 pixels.
+Commit applicatif : f0d25f870c5d0ad7ba2da73fe095d9878c78cc4e.
+CI push réussie : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38285036858.
+CI PR réussie : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38285042621.
+Release : https://github.com/thierrystr13/Telmi-Sync-Plus/releases/tag/v0.20.2-test-f0d25f8.
+EXE : 300 598 288 octets ; SHA-256
+e96141225c2cefce13d513393e0efce9b763d1afba36ba0a3865d30801ce8e80.
+60 tests réussis et rendu Electron réel vérifié. Installation propre et mise
+à jour 0.20.1 → 0.20.2 conservant les réglages réussies en CI. La fixture utilise
+le code actuel avec métadonnées de version 0.20.1. Le premier run 38284264391
+avait échoué sur le dernier bouton des collections : marge verticale augmentée,
+mesure après deux frames et capture systématique en cas d’échec ; mêmes exigences.
+Mise à jour directe 0.20.1 → 0.20.2 terminée, version vérifiée et données
+conservées. Les détails propres au poste restent dans le rapport local non
+versionné. Aucune fusion ni modification de TELMI+ ou upstream.
+Les sections suivantes conservent l’historique de la refonte et des livraisons.
+
+## Livraison précédente vérifiée : 0.20.1 — 2026-10-12
 
 Commit applicatif : e2af165becf92b42f5d1aaab551513fb76f57a30.
 CI push réussie : https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38281121445.
@@ -42,18 +63,10 @@ assets ni le tag. Le titre des futures releases utilise package.version ;
 syntaxe PowerShell vérifiée. Ce changement de titre et les comptes rendus
 ne modifient pas le code applicatif de l'installateur testé ci-dessus.
 
-## Installation réelle de 0.20.1
+## Installation de 0.20.1
 
-Mise à jour directe 0.20.0 → 0.20.1 terminée sur le PC utilisateur.
-EXE ProductVersion 0.20.1.0 et entrée HKCU DisplayVersion 0.20.1 vérifiés.
-Chemin stable : %LOCALAPPDATA%/Programs/TELMI Sync Plus/TELMI Sync Plus.exe.
-Sauvegarde complète des paramètres et userData : 238 fichiers, environ 1193 Mio,
-empreintes SHA-256 identiques avant/après mise à jour. Les 20494 fichiers
-personnels histoires/musiques conservent leurs tailles et dates de modification.
-Aucune modification de la carte SD dans cette session. Rapport local
-cache/telmi-sync-before-update-0.20.1-20261012-190138/result.json, dans le dépôt
-parent, ignoré par Git. L'ancienne copie machine dev.1 décrite plus bas n'a pas
-été désinstallée ; aucune nouvelle demande de nettoyage administrateur.
+Mise à jour directe terminée et données conservées ; détails du poste
+consignés dans le rapport local non versionné.
 
 ## Livraison précédente vérifiée : 0.20.0
 
@@ -65,13 +78,8 @@ EXE SHA-256 : b46adde247c2decae49a972261eb19eee5256b1ac2ab4680b1259b414c87a002.
 Le rapport INSTALLATION_TEST.json accompagne l'EXE. Les chiffres et builds
 ci-dessous retracent les livraisons antérieures. Lire aussi MULTIMEDIA_GUIDE.md.
 
-PC réel : 0.20.0 installé pour l'utilisateur, anciennes versions utilisateur
-0.18.0/dev.2 désinstallées. Sauvegarde 1 832 fichiers vérifiés SHA-256 et
-20 494 fichiers personnels conservés. Rapport local sous
-cache/telmi-sync-before-install-20261011-2247/result.json dans le dépôt parent.
-Il reste dev.1 dans Program Files : droits administrateur Windows indisponibles.
-Maintenance locale testée avec Get-Process/Stop-Process ; éviter CIM/taskkill
-qui se bloquent sur ce PC. Ne pas annoncer une seule installation globale.
+Installation utilisateur vérifiée, données conservées. Les détails du poste
+et des sauvegardes restent dans le rapport local non versionné.
 CI finale après le correctif de maintenance :
 https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38173645111, réussie.
 Release correspondante : v0.20.0-test-be08faf. Le binaire 610f9de déjà installé
@@ -87,7 +95,7 @@ conserve le même code applicatif ; pas de réinstallation nécessaire pour ce c
 
 ## Architecture
 
-DEV2 corrige la détection Windows signalée par l'utilisateur sur SD E: DEV11.
+DEV2 corrige la détection Windows signalée par l'utilisateur sur une carte DEV11.
 DriveList utilise fs.statfs sur les volumes montés Windows, cache partagé 3 s,
 timeout 3 s par lecteur. PowerShell reste uniquement dans le dialogue de formatage
 historique, afin d'exiger une classification physique amovible réelle.

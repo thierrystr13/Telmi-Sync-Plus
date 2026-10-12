@@ -1,11 +1,11 @@
 # TELMI Sync+
 
-TELMI Sync Plus 0.20.1 : films, YouTube Music et livres audio classés par
+TELMI Sync Plus 0.20.2 : films, YouTube Music et livres audio classés par
 histoire et épisodes. Basé sur Telmi Sync 0.18.0 par DantSu.
 
 [Guide multimédia](MULTIMEDIA_GUIDE.md) ·
-[Installateur Windows testé](https://github.com/thierrystr13/Telmi-Sync-Plus/releases/tag/v0.20.1-test-e2af165) ·
-[CI vérifiée](https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38281121445).
+[Installateur Windows testé](https://github.com/thierrystr13/Telmi-Sync-Plus/releases/tag/v0.20.2-test-f0d25f8) ·
+[CI vérifiée](https://github.com/thierrystr13/Telmi-Sync-Plus/actions/runs/38285036858).
 Documentation : [README_PLUS.md](README_PLUS.md). Build de test :
 [GitHub Actions](https://github.com/thierrystr13/Telmi-Sync-Plus/actions).
 

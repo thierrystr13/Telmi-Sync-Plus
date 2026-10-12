@@ -1,4 +1,4 @@
-# TELMI Sync Plus 0.20.1
+# TELMI Sync Plus 0.20.2
 
 ## Utilisation
 
@@ -20,8 +20,10 @@
   MP3 192 kb/s recommandé, 128/256 proposés, tags ID3 et pochette intégrée.
   Les analyses en cours d'édition restent en mémoire en changeant d'onglet ;
   les tâches de conversion sont persistantes entre les démarrages.
+  La fiche d’album possède son propre défilement pour atteindre tous les champs.
 - Livres audio : onglet principal, aussi accessible depuis Littérature audio
-  dans Stores. Collections RSS à gauche, puis dossiers par histoire. Ouvrir
+  dans Stores. Collections RSS à gauche, puis dossiers par histoire. La colonne
+  des collections défile indépendamment pour garder ses boutons accessibles. Ouvrir
   un dossier affiche tous ses épisodes et leurs résumés, numéros et saisons.
   Cocher le dossier ou la saison sélectionne tous ses épisodes accessibles.
   Les marqueurs Épisode/EP/Partie/Chapitre, fractions 1/6 et S07E09 du titre
@@ -83,14 +85,16 @@ Un résultat déjà vérifié
 avec les mêmes paramètres ne relance pas le nettoyage.
 
 CI : médias synthétiques, compilation Windows, vérification PE x64 et outils,
-ancienne version simulée avec le même identifiant NSIS, mise à jour en 0.20.1,
+ancienne version simulée avec le même identifiant NSIS, mise à jour en 0.20.2,
 préservation d'un réglage, désinstallation et installation propre, vérification
 du raccourci unique. Le rapport `INSTALLATION_TEST.json` accompagne l'exécutable.
-La fixture teste les métadonnées/identifiants d'installation de 0.20.0 ;
+La fixture teste les métadonnées/identifiants d'installation de 0.20.1 ;
 elle contient le code actuel. Le nettoyage du PC réel est vérifié séparément. Le rendu Electron du build React
 est également testé avec 30 pistes synthétiques : contraste, bouton MP3 dans
 la fenêtre, pochette/album, ouverture Musique, dossiers et ordre des épisodes.
-Les captures et RENDERER_TEST.json sont publiés dans un artifact distinct.
+Les derniers champs et boutons des panneaux latéraux sont contrôlés après
+défilement, avant la barre d’action. Les captures et RENDERER_TEST.json sont
+publiés dans un artifact distinct.
 Installateur non signé : Windows peut afficher un avertissement de provenance.
 
 ## Sources et droits
