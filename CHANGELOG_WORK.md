@@ -8,7 +8,9 @@
   dessous de 850 pixels. Le bouton MP3 reste accessible.
 - Test Electron complété : dernier champ de la fiche et dernier bouton de
   collection atteignables sans parcourir toute la liste. CI et installation
-  du complément restent à vérifier.
+  du complément restent à vérifier. Premier run 38284264391 : compilation
+  réussie, dernier bouton de collection recouvert en CI ; marge verticale
+  augmentée et mesure après deux frames de rendu, sans alléger le contrôle.
 
 
 ## 2026-10-12 — 0.20.1 : bibliothèque par histoire et YouTube Music
