@@ -1,4 +1,4 @@
-# TELMI Sync Plus 0.20.0
+# TELMI Sync Plus 0.20.1
 
 ## Utilisation
 
@@ -8,24 +8,34 @@
   déjà compatibles sont remuxés sans réencodage. La variation de taille est
   mesurée après préparation ; une conversion indispensable peut agrandir un
   petit fichier. Les originaux locaux et NAS restent à leur emplacement.
-- Synchroniser musique : ouvrir « Importer depuis YouTube », analyser une
-  vidéo ou une playlist (500 pistes maximum), sélectionner les pistes et
-  vérifier les droits. Corriger titre, artiste, album, piste, année, genre.
-  MusicBrainz propose des correspondances et leurs éditions pour Cover Art
-  Archive ; une image JPG/PNG locale est toujours possible. Les champs artiste,
-  album, année et genre peuvent être appliqués à une sélection. La file importe
-  chaque piste et permet annulation/reprise, sans considérer une playlist comme
-  un album. MP3 192 kb/s par défaut, 128/256 proposés ; un MP3 déjà compatible
-  est conservé sans gonfler son débit. Tags ID3 et pochette intégrée.
-- Story : onglet « Littérature audio ». Recherche commune dans les onze flux,
-  résumés et thèmes, catégories estimées, filtres d'âge et durée, favoris,
-  sélection de résultats/collection, suivi des imports. « Écouter chez
-  l'éditeur » ouvre le lecteur officiel. Aucun audio n'est téléchargé lors du
-  chargement des catalogues ; cache de métadonnées de 24 heures. Les imports
-  explicitement autorisés deviennent des packs compatibles avec la liste et
-  la synchronisation d'histoires existantes. Le regroupement crée un menu
-  d'épisodes ordonnés par numéro ou date. Le titre est inscrit dans chaque
-  illustration de sélection. Aucun flux France Inter ajouté.
+- YouTube Music : onglet principal séparé. Coller une URL de vidéo ou playlist,
+  analyser, sélectionner les pistes puis compléter la fiche d'album à droite.
+  Le choix JPG/PNG et la recherche MusicBrainz restent dans cet écran. Le bouton
+  « Appliquer l'album et la pochette à la sélection » conserve les titres,
+  artistes et numéros ; les autres modifications groupées restent possibles.
+  Confirmer les droits, puis « Convertir en MP3 ». Le bouton reste visible en
+  bas, y compris pour une longue playlist. Les conversions terminées sont
+  ajoutées automatiquement à la bibliothèque de Synchroniser → Musique.
+  « Ouvrir Synchroniser musique » ouvre directement le bon sous-onglet.
+  MP3 192 kb/s recommandé, 128/256 proposés, tags ID3 et pochette intégrée.
+  Les analyses en cours d'édition restent en mémoire en changeant d'onglet ;
+  les tâches de conversion sont persistantes entre les démarrages.
+- Livres audio : onglet principal, aussi accessible depuis Littérature audio
+  dans Stores. Collections RSS à gauche, puis dossiers par histoire. Ouvrir
+  un dossier affiche tous ses épisodes et leurs résumés, numéros et saisons.
+  Cocher le dossier ou la saison sélectionne tous ses épisodes accessibles.
+  Les marqueurs Épisode/EP/Partie/Chapitre, fractions 1/6 et S07E09 du titre
+  déterminent les séries ; le numéro global d'un podcast ne mélange pas des
+  récits indépendants. Les titres de collections nommées sont aussi regroupés.
+  Les épisodes sont triés par saison puis numéro, avec date/titre en repli.
+  Les sources restent séparées. Filtres d'âge, type, durée, thème et favoris.
+  « Importer par histoire » crée un pack nommé par histoire, avec son menu
+  d'épisodes compatible avec le lecteur TELMI+ ; une sélection de plusieurs
+  dossiers produit plusieurs packs. L'index episodes.json conserve numéros,
+  saisons, titres, source et résumés hors ligne. Les anciens packs ne sont
+  ni déplacés ni supprimés. Maximum 100 épisodes par import.
+  Les dossiers sont un classement du catalogue : on conserve les répertoires
+  de packs attendus par le lecteur et la synchronisation existants.
 - Paramètres > Stockage : six dossiers, bouton Parcourir, test de lecture,
   écriture et espace libre. Chemins locaux, lecteurs réseau et UNC acceptés.
   Un serveur indisponible est signalé. Les mots de passe Windows/NAS ne sont
@@ -73,11 +83,14 @@ Un résultat déjà vérifié
 avec les mêmes paramètres ne relance pas le nettoyage.
 
 CI : médias synthétiques, compilation Windows, vérification PE x64 et outils,
-ancienne version simulée avec le même identifiant NSIS, mise à jour en 0.20.0,
+ancienne version simulée avec le même identifiant NSIS, mise à jour en 0.20.1,
 préservation d'un réglage, désinstallation et installation propre, vérification
 du raccourci unique. Le rapport `INSTALLATION_TEST.json` accompagne l'exécutable.
-La fixture teste les métadonnées/identifiants d'installation de 0.19.0-dev.2 ;
-elle contient le code actuel. Le nettoyage du PC réel est vérifié séparément.
+La fixture teste les métadonnées/identifiants d'installation de 0.20.0 ;
+elle contient le code actuel. Le nettoyage du PC réel est vérifié séparément. Le rendu Electron du build React
+est également testé avec 30 pistes synthétiques : contraste, bouton MP3 dans
+la fenêtre, pochette/album, ouverture Musique, dossiers et ordre des épisodes.
+Les captures et RENDERER_TEST.json sont publiés dans un artifact distinct.
 Installateur non signé : Windows peut afficher un avertissement de provenance.
 
 ## Sources et droits

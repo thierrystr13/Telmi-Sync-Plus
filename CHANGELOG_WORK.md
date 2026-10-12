@@ -1,5 +1,24 @@
 # Journal TELMI Sync+
 
+## 2026-10-12 — 0.20.1 : bibliothèque par histoire et YouTube Music
+
+- Cause du contraste : champs MP3 hors du sélecteur de thème, panneau réduit à
+  330 pixels masquant la conversion. Remplacement par un onglet principal,
+  fiche latérale sans modale, thème sombre et action MP3 toujours accessible.
+- Choix JPG/PNG et recherche MusicBrainz dans la fiche ; application album et
+  pochette à la sélection en conservant titres/artistes/numéros.
+- MP3 terminés réutilisent la bibliothèque/synchronisation existante. Raccourci
+  ouvre directement Synchroniser Musique ; analyses conservées dans la session.
+- Livres audio : collections, dossiers par récit/série, épisodes triés, saisons,
+  sélection dossier/saison et filtres âge/type/thème/durée/favoris.
+- Import par histoire : plusieurs dossiers donnent plusieurs packs bien nommés,
+  avec index hors ligne ; aucune suppression/migration des anciens imports.
+- 60 tests locaux réussis ; build React réussi. Nouveau test Electron de rendu
+  réel réussi localement (1280 et 1000 pixels, 30 pistes, album et 12 épisodes).
+  Captures CI, outils empaquetés et upgrade 0.20.0 → 0.20.1 à vérifier.
+- Installation directe demandée, après résultat CI vérifié.
+
+
 ## 2026-10-11 — correctif DEV2 : détection Windows / TELMI+ DEV11
 
 - Signalement utilisateur : aucune carte et erreur PowerShell dans Films & Vidéos.

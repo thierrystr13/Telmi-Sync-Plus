@@ -19,17 +19,17 @@ function Install-Test([string]$File,[string]$Version){
  $taskEntry|Add-Member -NotePropertyName VerifiedLocation -NotePropertyValue $taskLocation
  return $taskEntry
 }
-$taskOld=Install-Test $Previous '0.19.0-dev.2'
-$taskNew=Install-Test $Installer '0.20.0'
+$taskOld=Install-Test $Previous '0.20.0'
+$taskNew=Install-Test $Installer '0.20.1'
 if($taskOld.VerifiedLocation -ne $taskNew.VerifiedLocation){throw 'Chemin modifié pendant la mise à jour'}
 $taskUninstall=[regex]::Match($taskNew.UninstallString,'^"([^"]+)"').Groups[1].Value
 if((Split-Path $taskUninstall) -ne (Join-Path $env:LOCALAPPDATA 'Programs\TELMI Sync Plus')){throw ('Désinstalleur inattendu : '+$taskUninstall)}
 $taskProcess=Start-Process -FilePath $taskUninstall -ArgumentList @('/S','/currentuser') -PassThru -Wait -WindowStyle Hidden
 for($taskAttempt=0;$taskAttempt -lt 30 -and (Test-Path -LiteralPath $taskKey);$taskAttempt++){Start-Sleep -Seconds 1}
 if(Test-Path -LiteralPath $taskKey){throw 'Désinstallation incomplète'}
-$taskClean=Install-Test $Installer '0.20.0'
+$taskClean=Install-Test $Installer '0.20.1'
 $taskExe=Join-Path $taskClean.VerifiedLocation 'TELMI Sync Plus.exe'
 if(!(Test-Path -LiteralPath $taskExe)){throw 'Exécutable installé absent'}
 $taskShortcuts=@(Get-ChildItem (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs') -Filter '*TELMI Sync Plus*.lnk' -Recurse)
 if($taskShortcuts.Count -ne 1){throw 'Raccourcis de menu Démarrer dupliqués ou absents'}
-@{cleanInstall=$true;upgrade=$true;settingsPreserved=$true;oldVersion='0.19.0-dev.2';version='0.20.0';registryEntries=1;startMenuShortcuts=1;fixture='same stable application identity with previous version metadata'}|ConvertTo-Json|Set-Content 'electron/dist/INSTALLATION_TEST.json'
+@{cleanInstall=$true;upgrade=$true;settingsPreserved=$true;oldVersion='0.20.0';version='0.20.1';registryEntries=1;startMenuShortcuts=1;fixture='same stable application identity with previous version metadata'}|ConvertTo-Json|Set-Content 'electron/dist/INSTALLATION_TEST.json'

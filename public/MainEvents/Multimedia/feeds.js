@@ -6,6 +6,7 @@ import {atomicJson} from '../Videos/library.js'
 import {run,image,hash} from '../Videos/process.js'
 import {audioProbe,convertMp3} from './audio.js'
 import {generateDirNameStory} from '../Helpers/Stories.js'
+import {storyFolders,episodeOrder,episodeDetails} from '../../../src/App/Modules/Multimedia/storyFolders.js'
 const text=v=>typeof v==='string'?v:v?._||''
 const plain=v=>String(v||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim()
 export const digest=v=>createHash('sha256').update(v).digest('hex')
@@ -25,7 +26,8 @@ export async function parseFeed(xml,source){
    const kind=/saison|feuilleton/i.test(lower)?'Feuilleton':/partie\s*\d|épisode\s*\d|chapitre\s*\d/i.test(lower)?'Histoire en plusieurs parties':/conte traditionnel|grimm|perrault|andersen/i.test(lower)?'Conte traditionnel':'Histoire indépendante'
    const premium=/réservé.{0,20}abonn|subscriber.only|premium.only|subscribe.to.listen/i.test(lower)
    const categories=Object.entries({'Contes':/conte/,'Aventures':/aventure|pirate|chevalier/,'Animaux':/animal|animaux|chat|chien/,'Fantastique':/dragon|sorci|fantastique/,'Humour':/humour|drôle|drôle/,'Mythologie':/mytholog/,'Histoires du soir':/dormir|sommeil|soir/,'Découvertes':/découvr|decouvr|science|espace/,'Histoires classiques':/grimm|perrault|andersen|classique/}).filter(([,pattern])=>pattern.test(lower)).map(([label])=>label)
-   return {id:digest(text(item.guid?.[0]||item.id?.[0])||url||title),title,sourceId:source.id,source:source.title||source.id,description,url,link:text(item.link?.find(x=>typeof x==='string')||item.link?.[0])||source.publisher,cover:item['itunes:image']?.[0]?.$?.href||picture,duration:durationValue(text(item['itunes:duration']?.[0])),age:ageMatch?Number(ageMatch[1]):null,classificationEstimated:true,themes,categories,kind,author:text(item['itunes:author']?.[0]||item.author?.[0]),date:text(item.pubDate?.[0]||item.published?.[0]),available:/^https?:\/\//.test(url)&&!premium,premium}
+   const number=key=>{const n=Number(text(item[key]?.[0]));return Number.isInteger(n)&&n>0?n:null}
+   return {id:digest(text(item.guid?.[0]||item.id?.[0])||url||title),title,sourceId:source.id,source:source.title||source.id,description,url,link:text(item.link?.find(x=>typeof x==='string')||item.link?.[0])||source.publisher,cover:item['itunes:image']?.[0]?.$?.href||picture,duration:durationValue(text(item['itunes:duration']?.[0])),age:ageMatch?Number(ageMatch[1]):null,classificationEstimated:true,themes,categories,kind,author:text(item['itunes:author']?.[0]||item.author?.[0]),date:text(item.pubDate?.[0]||item.published?.[0]),episodeNumber:number('itunes:episode'),seasonNumber:number('itunes:season'),available:/^https?:\/\//.test(url)&&!premium,premium}
  })
  return {title,cover:picture,episodes}
 }
@@ -76,12 +78,9 @@ export async function exportStory(tools,episode,paths,{authorized=false,signal,f
 }
 export async function exportCollection(tools,episodes,paths,options={}) {
  if(!episodes.length||episodes.length>100)throw new Error('Collection vide ou trop grande.')
- const ordered=[...episodes].sort((a,b)=>{
-  const number=e=>Number(/(?:épisode|chapitre|partie)\s*(\d+)/i.exec(e.title)?.[1])
-  const x=number(a),y=number(b)
-  return x&&y?x-y:Date.parse(a.date)-Date.parse(b.date)||a.title.localeCompare(b.title,'fr',{numeric:true})
- })
- const uuid=digest(ordered.map(e=>e.id).join('|')).slice(0,36),title=ordered[0].source+' — Collection'
+ if(!options.authorized||episodes.some(e=>!e.available||e.premium))throw new Error('Tous les épisodes doivent être accessibles et leur import autorisé.')
+ const ordered=[...episodes].sort(episodeOrder),folders=storyFolders(ordered)
+ const uuid=digest(ordered.map(e=>e.id).join('|')).slice(0,36),title=options.title||(folders.length===1?folders[0].title:ordered[0].source+' — Collection')
  const target=path.join(paths.stories,generateDirNameStory(title,uuid,undefined,'Littérature audio'))
  if(await fs.access(path.join(target,'metadata.json')).then(()=>true,()=>false))return target
  const work=path.join(paths.work,'collection-'+randomUUID()),staging=path.join(paths.stories,'.telmi-collection-'+randomUUID())
@@ -100,8 +99,23 @@ export async function exportCollection(tools,episodes,paths,options={}) {
   }
   await atomicJson(path.join(staging,'nodes.json'),{startAction:{action:'menu',index:0},stages,actions})
   await atomicJson(path.join(staging,'notes.json'),notes)
-  await atomicJson(path.join(staging,'metadata.json'),{title,uuid,version:1,image:'cover.png',category:'Littérature audio',description:ordered.map(e=>e.title).join('\n')})
+  await atomicJson(path.join(staging,'episodes.json'),{version:1,title,episodes:ordered.map((e,index)=>({id:e.id,title:e.title,source:e.source,episode:episodeDetails(e).episodeNumber,season:episodeDetails(e).seasonNumber,index,audio:'s'+index+'.mp3',description:e.description||''}))})
+  await atomicJson(path.join(staging,'metadata.json'),{title,uuid,version:1,image:'cover.png',category:'Littérature audio',description:ordered.map(e=>e.title).join('\n'),storyType:folders.length===1?folders[0].kind:'Collection de récits',sources:[...new Set(ordered.map(e=>e.sourceId))]})
   if(options.signal?.aborted)throw new Error('Import annulé.')
   await fs.rename(staging,target);return target
  }finally{await fs.rm(work,{recursive:true,force:true});await fs.rm(staging,{recursive:true,force:true})}
+}
+export async function exportByStory(tools,episodes,paths,options={}) {
+ if(!Array.isArray(episodes)||!episodes.length||episodes.length>100)throw new Error('Choisissez de 1 à 100 épisodes.')
+ const results=[];let current=0
+ for(const folder of storyFolders(episodes)){
+  if(options.signal?.aborted)break
+  try{
+   if(folder.episodes.length===1)await exportStory(tools,folder.episodes[0],paths,options)
+   else await exportCollection(tools,folder.episodes,paths,{...options,title:folder.title})
+   results.push(...folder.episodes.map(e=>({id:e.id,ok:true})))
+  }catch(error){results.push(...folder.episodes.map(e=>({id:e.id,error:error.message})))}
+  current+=folder.episodes.length;options.onProgress?.({current,total:episodes.length})
+ }
+ return results
 }

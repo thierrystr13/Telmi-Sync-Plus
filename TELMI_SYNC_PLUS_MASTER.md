@@ -1,5 +1,30 @@
 # TELMI Sync+ — reprise du développement
 
+## Correctif en cours : 0.20.1 — 2026-10-12
+
+Demande utilisateur : classement RSS par histoire et épisodes, écran MP3
+lisible, onglet YouTube Music séparé, pochettes et passage direct à Musique.
+Implémentation : routes YouTubeMusic/StoryLibrary, thème partagé sombre,
+éditeur d'album inline, bouton MP3 sticky, Router params tab=music et Tabs
+initialTab. LocalMusicProvider et le signal existant local-musics-data reçoivent
+les MP3 terminés ; aucun nouveau stockage ni déplacement personnel.
+storyFolders.js partagé entre React et backend (inclus dans app.asar) :
+regroupement explicitement numéroté ou collection nommée, séparation des sources,
+tri saison/épisode, sélection entière ; mode IPC story-import='by-story'.
+ExportCollection utilise le vrai titre et écrit episodes.json ; exportByStory
+publie des packs séparés et rapporte les échecs par dossier. Anciens packs gardés.
+
+60 tests locaux réussis, build React réussi (trois avertissements upstream).
+scripts/test-renderer.cjs charge le build réel dans une fenêtre Electron cachée,
+avec test/fixtures/media-preview.cjs et profil .tools isolé, sans données réelles.
+Il vérifie couleurs, position du bouton MP3 avec 30 pistes, modification d'album
+et pochette, passage au sous-onglet musique, ordre numérique des épisodes.
+Test de rendu Electron réussi localement : bouton visible avec 30 pistes à
+1280 et 1000 pixels, album présent dans Musique, épisodes 1 à 12 ordonnés.
+Captures sous .tools/renderer-qa, données de démonstration exclusivement.
+CI et installation réelle 0.20.1 restent à vérifier avant de déclarer livraison.
+L'utilisateur demande explicitement l'installation directe après validation.
+
 ## Dernière livraison vérifiée : 0.20.0
 
 Commit applicatif : 610f9de066c93ac7752555557a9463d2d06f2316.

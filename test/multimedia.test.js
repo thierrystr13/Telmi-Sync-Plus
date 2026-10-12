@@ -7,7 +7,7 @@ import {storagePaths,saveStorage,checkStorage,STORAGE_KEYS} from '../public/Main
 import {run,probe,convert,hash} from '../public/MainEvents/Videos/process.js'
 import {conversionPlan} from '../public/MainEvents/Videos/contract.js'
 import {audioProbe,convertMp3,taggedMusic,musicFilename,youtubeCollection,AudioImports} from '../public/MainEvents/Multimedia/audio.js'
-import {parseFeed,durationValue,StoryCatalog,exportStory,exportCollection,publicFetch} from '../public/MainEvents/Multimedia/feeds.js'
+import {parseFeed,durationValue,StoryCatalog,exportStory,exportCollection,exportByStory,publicFetch} from '../public/MainEvents/Multimedia/feeds.js'
 import {readStories} from '../public/MainEvents/Helpers/Stories.js'
 import {atomicJson} from '../public/MainEvents/Videos/library.js'
 
@@ -136,4 +136,20 @@ test('corrupt or cancelled RSS audio never publishes partial story and leaves so
 test('reading a damaged personal story folder never deletes it',async()=>{
  const dir=path.join(paths.stories,'personal-incomplete');await fs.mkdir(dir);await fs.writeFile(path.join(dir,'keep.txt'),'personal')
  assert.ok(readStories(paths.stories).error.includes('personal-incomplete'));assert.equal(await fs.readFile(path.join(dir,'keep.txt'),'utf8'),'personal')
+})
+test('story folders export separate named packs with ordered episodes and keep existing personal stories',async()=>{
+ const dest={...paths,stories:path.join(root,'by-story')};await fs.mkdir(dest.stories,{recursive:true});const personal=path.join(dest.stories,'personal');await fs.mkdir(personal);await fs.writeFile(path.join(personal,'keep.txt'),'keep')
+ const episodes=[2,1].map(n=>({id:('story'+n).padEnd(64,'f'),title:'Épisode '+n+'/2 - Le Dragon - Partie '+n,sourceId:'test',source:'Test',description:'Résumé '+n,available:true,url:'https://example.org/'+n,duration:1}))
+ episodes.push({id:'alone'.padEnd(64,'b'),title:'Un conte séparé',sourceId:'test',source:'Test',available:true,url:'https://example.org/alone',duration:1})
+ const options={authorized:true,fetcher:async()=>fs.readFile(audio)},results=await exportByStory(tools,episodes,dest,options)
+ assert.equal(results.filter(r=>r.ok).length,3)
+ const packs=readStories(dest.stories).stories;assert.equal(packs.length,2);const dragon=packs.find(p=>p.title==='Le Dragon');assert.ok(dragon)
+ const dir=(await fs.readdir(dest.stories)).find(n=>n.includes('Le Dragon'));const index=JSON.parse(await fs.readFile(path.join(dest.stories,dir,'episodes.json'),'utf8'))
+ assert.deepEqual(index.episodes.map(e=>e.episode),[1,2]);assert.match(index.episodes[0].description,/Résumé 1/)
+ await exportByStory(tools,episodes,dest,options);assert.equal(readStories(dest.stories).stories.length,2)
+ assert.equal(await fs.readFile(path.join(personal,'keep.txt'),'utf8'),'keep')
+})
+test('RSS season and episode fields are extracted without forcing unrelated story grouping',async()=>{
+ const xml='<rss xmlns:itunes="http://www.itunes.com"><channel><title>Test</title><item><guid>field</guid><title>Histoire unique</title><itunes:episode>431</itunes:episode><itunes:season>2</itunes:season><enclosure url="https://example.org/a.mp3"/></item></channel></rss>'
+ const {episodes}=await parseFeed(xml,{id:'test',url:'https://example.org/rss'});assert.equal(episodes[0].episodeNumber,431);assert.equal(episodes[0].seasonNumber,2)
 })

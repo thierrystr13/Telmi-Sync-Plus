@@ -5,6 +5,7 @@ import DownloadFFmpeg from '../Modules/DownloadFFmpeg/Home.js'
 import Studio from '../Modules/Studio/Home.js'
 import AndroidApp from '../Modules/AndroidApp/Home.js'
 import Videos from '../Modules/Videos/Home.js'
+import {YouTubeMusicHome as YouTubeMusic,StoryLibraryHome as StoryLibrary} from '../Modules/Multimedia/Home.js'
 
 
-export {Synchronize, Stores, RSSFeed, DownloadFFmpeg, Studio, AndroidApp, Videos}
+export {Synchronize, Stores, RSSFeed, DownloadFFmpeg, Studio, AndroidApp, Videos, YouTubeMusic, StoryLibrary}

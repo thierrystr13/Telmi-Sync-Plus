@@ -1,7 +1,7 @@
 {
   "name": "telmi-sync-plus",
-  "description": "TELMI Sync+ : histoires, musique, films et vidéos pour TELMI+.",
-  "version": "0.20.0",
+  "description": "TELMI Sync+ : histoires, musique, films et vidÃ©os pour TELMI+.",
+  "version": "0.20.1",
   "author": {
     "name": "Franck ALARY",
     "url": "http://dantsu.com/"
@@ -59,11 +59,28 @@
     "productName": "TELMI Sync Plus",
     "npmRebuild": false,
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "artifactName": "TELMI-Sync-Plus-Windows-x64.exe"
     },
-    "nsis": {"oneClick": true, "allowToChangeInstallationDirectory": false, "allowElevation": false, "perMachine": false, "deleteAppDataOnUninstall": false, "include": "electron/build/installer.nsh"},
-    "files": ["build/**/*", "public/**/*", "package.json", "LICENSE", "NOTICE.md", "VIDEO_FORMAT.md"],
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "allowElevation": false,
+      "perMachine": false,
+      "deleteAppDataOnUninstall": false,
+      "include": "electron/build/installer.nsh"
+    },
+    "files": [
+      "build/**/*",
+      "public/**/*",
+      "package.json",
+      "LICENSE",
+      "NOTICE.md",
+      "VIDEO_FORMAT.md",
+      "src/App/Modules/Multimedia/storyFolders.js"
+    ],
     "mac": {
       "extendInfo": {
         "NSMicrophoneUsageDescription": "Access to your microphone is needed for record your voice",

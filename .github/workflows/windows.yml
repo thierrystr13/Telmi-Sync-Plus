@@ -43,6 +43,8 @@ jobs:
         run: yarn build:win
       - name: Verify Windows binary and bundled dependencies
         run: yarn verify:windows
+      - name: Verify actual Electron renderer with synthetic multimedia
+        run: node_modules/.bin/electron scripts/test-renderer.cjs
       - name: Build previous-version upgrade fixture
         run: node scripts/build-windows.js --fixture
       - name: Test clean installation and update preserving settings
@@ -67,7 +69,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $taskTag='v0.20.0-test-'+$env:GITHUB_SHA.Substring(0,7)
+          $taskVersion=(Get-Content package.json|ConvertFrom-Json).version
+          $taskTag='v'+$taskVersion+'-test-'+$env:GITHUB_SHA.Substring(0,7)
           $taskNotes="Version de test non signée. Médias synthétiques et tests d'installation/mise à jour validés par ce workflow. Lecture physique sur Miyoo et NAS Synology non validés. Code source : https://github.com/$env:GITHUB_REPOSITORY/tree/$env:GITHUB_SHA ; licences et liens des sources tierces dans NOTICE.md."
           gh release create $taskTag electron/dist/TELMI-Sync-Plus-Windows-x64.exe electron/dist/INSTALLATION_TEST.json electron/dist/TELMI-Sync-Plus-Windows-x64.exe.sha256 --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --prerelease --title 'TELMI Sync Plus 0.20.0 — test multimédia' --notes $taskNotes
       - uses: actions/upload-artifact@v4
@@ -75,4 +78,10 @@ jobs:
         with:
           name: build-diagnostics
           path: electron/dist/builder-debug.yml
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: multimedia-renderer-verification
+          path: .tools/renderer-qa/
           if-no-files-found: ignore
