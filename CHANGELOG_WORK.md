@@ -1,5 +1,16 @@
 # Journal TELMI Sync+
 
+## 2026-10-12 — 0.20.2 : défilement des fiches longues
+
+- Les panneaux latéraux peuvent dépasser la hauteur disponible avec de longues
+  playlists ou de nombreuses sources. Ajout d’un défilement indépendant pour
+  la fiche d’album et la colonne des collections ; repli en flux normal en
+  dessous de 850 pixels. Le bouton MP3 reste accessible.
+- Test Electron complété : dernier champ de la fiche et dernier bouton de
+  collection atteignables sans parcourir toute la liste. CI et installation
+  du complément restent à vérifier.
+
+
 ## 2026-10-12 — 0.20.1 : bibliothèque par histoire et YouTube Music
 
 - Cause du contraste : champs MP3 hors du sélecteur de thème, panneau réduit à

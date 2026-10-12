@@ -36,7 +36,7 @@
 .coverPlaceholder {display:flex; align-items:center; justify-content:center; color:#edcaff; font-size:24px;}
 .coverLarge {display:block; width:160px; height:160px; object-fit:cover; border-radius:10px; background:#573268; margin:12px auto;}
 .coverLarge.coverPlaceholder {display:flex; font-size:52px;}
-.editor {position:sticky; top:0; display:flex; flex-direction:column; gap:12px;}
+.editor {position:sticky; top:0; display:flex; flex-direction:column; gap:12px; max-height:calc(100vh - 220px); overflow-y:auto; scroll-padding-block:12px;}
 .fields {display:grid; grid-template-columns:1fr 1fr; gap:10px;}
 .full {grid-column:1/-1;}
 .matches {max-height:260px; overflow:auto; display:flex; flex-direction:column; gap:8px;}
@@ -52,7 +52,7 @@
 .badge {display:inline-flex; align-items:center; gap:4px; font-size:12px; border-radius:20px; background:#523269; color:#eee0f8; padding:4px 8px;}
 .badges {display:flex; flex-wrap:wrap; gap:6px; margin:8px 0;}
 .libraryLayout {display:grid; grid-template-columns:230px minmax(0,1fr); gap:18px; align-items:start;}
-.sidebar {display:flex; flex-direction:column; gap:8px; position:sticky; top:0;}
+.sidebar {display:flex; flex-direction:column; gap:8px; position:sticky; top:0; max-height:calc(100vh - 220px); overflow-y:auto;}
 .page .folderNav {justify-content:space-between; text-align:left; width:100%;}
 .page .folderNav.selected {border-color:$orange; background:#59316d;}
 .sidebar h3 {margin-top:12px;}
@@ -72,4 +72,4 @@
 .empty {padding:28px; text-align:center; color:#d0bfdc; background:#301747; border:1px dashed #896599; border-radius:12px;}
 .filterBar {display:grid; grid-template-columns:minmax(220px,2fr) repeat(3,minmax(120px,1fr)); gap:10px;}
 @media(max-width:1120px) {.musicLayout {grid-template-columns:minmax(360px,1fr) 300px;} .libraryLayout {grid-template-columns:190px minmax(0,1fr);} .filterBar {grid-template-columns:1fr 1fr;}}
-@media(max-width:850px) {.musicLayout,.libraryLayout {grid-template-columns:1fr;} .editor,.sidebar {position:static;} .sidebar {display:grid;grid-template-columns:1fr 1fr;} .sidebar h3 {grid-column:1/-1;} .episodeRow {grid-template-columns:24px minmax(0,1fr);} .episodeRow > .toolbar {grid-column:2;} .steps {gap:10px;} }
+@media(max-width:850px) {.musicLayout,.libraryLayout {grid-template-columns:1fr;} .editor,.sidebar {position:static;max-height:none;overflow:visible;} .sidebar {display:grid;grid-template-columns:1fr 1fr;} .sidebar h3 {grid-column:1/-1;} .episodeRow {grid-template-columns:24px minmax(0,1fr);} .episodeRow > .toolbar {grid-column:2;} .steps {gap:10px;} }

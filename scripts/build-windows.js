@@ -5,7 +5,7 @@ const config = {...pkg.build, extends: null, extraResources: pkg.build.extraReso
   ...resource, filter: [...resource.filter, '!**/darwin/**/*', '!**/linux/**/*']
 }))}
 if (process.argv.includes('--fixture')) {
-  config.extraMetadata = {version: '0.20.0'}
+  config.extraMetadata = {version: '0.20.1'}
   config.directories = {...config.directories, output: '.tools/upgrade-fixture'}
 }
 // A separate config path avoids concatenating package.json resource arrays
